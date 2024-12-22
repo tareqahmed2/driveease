@@ -8,6 +8,13 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(email, password);
+  };
 
   return (
     <div className="flex justify-center items-center my-10 mx-5">
@@ -15,7 +22,7 @@ const Login = () => {
         <h2 className="text-2xl my-10 font-bold text-center mb-6 text-[#FF00D3]">
           Login Now!
         </h2>
-        <form className="card-body">
+        <form onSubmit={handleSubmit} className="card-body">
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
@@ -25,6 +32,7 @@ const Login = () => {
               placeholder="email"
               className="input input-bordered"
               required
+              name="email"
             />
           </div>
 
@@ -38,6 +46,7 @@ const Login = () => {
                 placeholder="password"
                 className="input w-full input-bordered pr-10"
                 required
+                name="password"
               />
               <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"

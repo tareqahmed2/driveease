@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  const { signUp } = useAuth();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const name = form.name.value;
+    const photo = form.photoURL.value;
+    const password = form.password.value;
+    signUp(email, password, name, photo, navigate);
+  };
   return (
     <div className="flex justify-center items-center my-10 mx-5">
       <div className="card bg-base-100 w-full md:w-3/4 lg:w-3/6 shrink-0 shadow-2xl">
         <h2 className="text-2xl my-10 font-bold text-center mb-2 text-blue-600">
           Register Now!
         </h2>
-        <form className="card-body">
+        <form onSubmit={handleSubmit} className="card-body">
           <div className="form-control">
             <label className="label">
               <span className="label-text">Name</span>
