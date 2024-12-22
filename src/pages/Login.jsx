@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
+  const { signInUser, signInWithGoogle } = useAuth();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -13,7 +15,14 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    // console.log(email, password);
+    signInUser(email, password, navigate)
+      .then((result) => {
+        console.log("sign in", result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -66,7 +75,10 @@ const Login = () => {
               Login
             </button>
           </div>
-          <button className="btn flex items-center">
+          <button
+            onClick={() => signInWithGoogle(navigate)}
+            className="btn flex items-center"
+          >
             <span>
               <FaGoogle />
             </span>

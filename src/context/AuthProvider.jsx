@@ -1,9 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import auth from "../firebase/firebase.init";
 import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -11,7 +15,45 @@ import { FaSpinner } from "react-icons/fa";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  console.log(user);
   const [loading, setLoading] = useState(false);
+  const provider = new GoogleAuthProvider();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+        setUserPhoto(null);
+        setUserName(null);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [auth]);
+  const signInWithGoogle = async (navigate) => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+
+        const user = result.user;
+
+        setUser(user);
+
+        setLoading(false);
+
+        toast.success("Login Successfully");
+        navigate("/");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        toast.error(errorMessage);
+      });
+  };
 
   const signUp = async (email, password, name, photo, navigate) => {
     setLoading(true);
@@ -19,12 +61,6 @@ const AuthProvider = ({ children }) => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(userCredential.user);
-
-        return updateProfile(user, {
-          displayName: name,
-          photoURL: photo,
-          email: email,
-        });
       })
       .then(() => {
         setLoading(false);
@@ -35,10 +71,30 @@ const AuthProvider = ({ children }) => {
       .catch((error) => {
         console.error("Error during user registration:", error.message);
         toast.error("Registration failed: " + error.message);
+
         setLoading(false);
+
         navigate("/register");
+        return;
       });
   };
+  const signInUser = async (email, password, navigate) => {
+    try {
+      setLoading(true);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+      if (result.user) {
+        navigate("/");
+      }
+      toast.success("Logged in successfully!");
+    } catch (error) {
+      toast.error("Failed to log in!");
+      return;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logOut = async () => {
     try {
       setLoading(true);
@@ -46,6 +102,8 @@ const AuthProvider = ({ children }) => {
       setUser(null);
     } catch (error) {
       toast.error("Failed to log out!");
+
+      return;
     } finally {
       setLoading(false);
     }
@@ -59,6 +117,8 @@ const AuthProvider = ({ children }) => {
   }
   const authInfo = {
     signUp,
+    signInUser,
+    signInWithGoogle,
   };
 
   return (
