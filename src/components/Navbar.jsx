@@ -22,7 +22,7 @@ const Navbar = () => {
           Available Cars
         </button>
       </li>
-      <li>
+      {/* <li>
         <button
           onClick={() => navigate("/login")}
           className="text-gray-600 hover:text-accent font-bold"
@@ -37,7 +37,7 @@ const Navbar = () => {
         >
           Register
         </button>
-      </li>
+      </li> */}
       <li>
         <button
           onClick={() => navigate("/add-car")}
@@ -112,8 +112,18 @@ const Navbar = () => {
         {/* Navbar End */}
         <div className="navbar-end w-full flex justify-end items-center gap-4">
           {/* Placeholder for user avatar and log-out logic */}
-          <button className="btn btn-primary">Primary</button>
-          <button className="btn btn-accent">Accent</button>
+          <button
+            onClick={() => navigate("/login")}
+            className="btn btn-secondary"
+          >
+            Login
+          </button>
+          <button
+            onClick={() => navigate("/register")}
+            className="btn btn-primary"
+          >
+            Register
+          </button>
         </div>
       </div>
     </div>
