@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/driveease.jpeg";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -94,13 +95,16 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <div>
+          <div className="flex gap-3 items-center">
             <img
-              className="w-12 h-12 rounded-full cursor-pointer"
-              src={""} // Replace with your logo image
+              className="w-10 h-10  rounded-full cursor-pointer"
+              src={logo} // Replace with your logo image
               alt="Logo"
               onClick={() => navigate("/")}
             />
+            <h2 className="text-2xl font-bold text-purple-700 hidden md:block">
+              DriveEase
+            </h2>
           </div>
         </div>
 

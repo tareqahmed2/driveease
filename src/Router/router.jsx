@@ -8,6 +8,7 @@ import Register from "../pages/Register";
 import AddCar from "../pages/AddCar";
 import MyCars from "../pages/MyCars";
 import MyBookings from "../pages/MyBookings";
+import ErrorPage from "../components/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/my-bookings",
         element: <MyBookings />,
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
       },
     ],
   },
