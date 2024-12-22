@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/driveease.jpeg";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logOut } = useAuth();
 
   const links = (
     <>
@@ -39,30 +41,34 @@ const Navbar = () => {
           Register
         </button>
       </li> */}
-      <li>
-        <button
-          onClick={() => navigate("/add-car")}
-          className="text-gray-600 hover:text-accent font-bold"
-        >
-          Add Car
-        </button>
-      </li>
-      <li>
-        <button
-          onClick={() => navigate("/my-cars")}
-          className="text-gray-600 hover:text-accent font-bold"
-        >
-          My Cars
-        </button>
-      </li>
-      <li>
-        <button
-          onClick={() => navigate("/my-bookings")}
-          className="text-gray-600 hover:text-accent font-bold"
-        >
-          My Bookings
-        </button>
-      </li>
+      {user && (
+        <>
+          <li>
+            <button
+              onClick={() => navigate("/add-car")}
+              className="text-gray-600 hover:text-accent font-bold"
+            >
+              Add Car
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => navigate("/my-cars")}
+              className="text-gray-600 hover:text-accent font-bold"
+            >
+              My Cars
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => navigate("/my-bookings")}
+              className="text-gray-600 hover:text-accent font-bold"
+            >
+              My Bookings
+            </button>
+          </li>
+        </>
+      )}
     </>
   );
 
@@ -116,18 +122,26 @@ const Navbar = () => {
         {/* Navbar End */}
         <div className="navbar-end w-full flex justify-end items-center gap-4">
           {/* Placeholder for user avatar and log-out logic */}
-          <button
-            onClick={() => navigate("/login")}
-            className="btn btn-secondary"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate("/register")}
-            className="btn btn-primary"
-          >
-            Register
-          </button>
+          {user ? (
+            <button onClick={logOut} className="btn btn-secondary">
+              Logout
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="btn btn-secondary"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="btn btn-primary"
+              >
+                Register
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ import { FaSpinner } from "react-icons/fa";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   console.log(user);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
 
   useEffect(() => {
@@ -25,14 +25,13 @@ const AuthProvider = ({ children }) => {
         setUser(currentUser);
       } else {
         setUser(null);
-        setUserPhoto(null);
-        setUserName(null);
       }
       setLoading(false);
     });
     return () => unsubscribe();
   }, [auth]);
   const signInWithGoogle = async (navigate) => {
+    setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -42,8 +41,6 @@ const AuthProvider = ({ children }) => {
 
         setUser(user);
 
-        setLoading(false);
-
         toast.success("Login Successfully");
         navigate("/");
       })
@@ -52,6 +49,9 @@ const AuthProvider = ({ children }) => {
         const errorMessage = error.message;
 
         toast.error(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -60,6 +60,7 @@ const AuthProvider = ({ children }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        setUser(user);
         console.log(userCredential.user);
       })
       .then(() => {
@@ -72,10 +73,11 @@ const AuthProvider = ({ children }) => {
         console.error("Error during user registration:", error.message);
         toast.error("Registration failed: " + error.message);
 
-        setLoading(false);
-
         navigate("/register");
         return;
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   const signInUser = async (email, password, navigate) => {
@@ -116,9 +118,12 @@ const AuthProvider = ({ children }) => {
     );
   }
   const authInfo = {
+    user,
     signUp,
     signInUser,
     signInWithGoogle,
+    logOut,
+    loading,
   };
 
   return (
