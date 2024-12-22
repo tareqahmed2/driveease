@@ -1,6 +1,6 @@
 import React from "react";
 
-// Example car data (replace with actual data or fetch from API)
+// Example car data
 const cars = [
   {
     id: 1,
