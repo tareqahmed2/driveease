@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { signUp } = useAuth();
   const togglePasswordVisibility = () => {
@@ -17,6 +18,31 @@ const Register = () => {
     const name = form.name.value;
     const photo = form.photoURL.value;
     const password = form.password.value;
+
+    if (!email || !name || !photo || !password) {
+      setError("All fields are required!");
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    const validDomains = ["gmail.com", "yahoo.com"];
+    const domain = email.split("@")[1];
+    if (!validDomains.includes(domain)) {
+      setError("Only Gmail or Yahoo email addresses are allowed.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setError("");
+
     signUp(email, password, name, photo, navigate);
   };
   return (
@@ -83,6 +109,9 @@ const Register = () => {
             </div>
           </div>
           <div className="form-control mt-6">
+            {error && (
+              <p className="text-red-500 text-center my-4 font-bold">{error}</p>
+            )}
             <button className="btn btn-primary">Register</button>
           </div>
         </form>
