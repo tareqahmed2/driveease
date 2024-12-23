@@ -10,7 +10,6 @@ const CarDetails = () => {
   const { user } = useAuth();
   const [carData, setCarData] = useState([]);
   const { setLoading } = useAuth();
-
   setLoading(true);
 
   useEffect(() => {
@@ -18,30 +17,74 @@ const CarDetails = () => {
       .get(`http://localhost:5000/all-cars/${id}`)
       .then((res) => {
         setCarData(res.data);
+        setLoading(false);
       })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [id]);
 
-      .catch((err) => console.error(err));
-  }, []);
   setLoading(false);
 
   const handleBooking = (car) => {
+    const currentDate = new Date().toISOString(); //
+    const totalPrice =
+      parseFloat(car.dailyRentalPrice) + parseFloat(car.dailyRentalPrice * 0.1);
+    console.log(car);
     const carWithEmail = {
-      ...car,
+      CarId: car._id,
+      addedBy: car.addedBy,
+      availability: car.availability,
+      bookingCount: car.bookingCount,
+      carModel: car.carModel,
+      dailyRentalPrice: car.dailyRentalPrice,
+      dateAdded: car.dateAdded,
+      description: car.description,
+      features: car.features,
+      imageURL: car.imageURL,
+      location: car.location,
+      vehicleRegistrationNumber: car.vehicleRegistrationNumber,
       email: user.email,
+      totalPrice: totalPrice,
+      currentDate: currentDate,
+      BookingStatus: "pending",
     };
 
     axios
-      .post("http://localhost:5000/all-bookings", carWithEmail)
+      .get(`http://localhost:5000/all-bookings/${user.email}`)
       .then((res) => {
-        // console.log(res.data);
-        if (res.data.insertedId) {
+        const existingBooking = res.data.find(
+          (booking) => booking._id === car._id
+        );
+
+        if (existingBooking) {
           Swal.fire({
-            title: "Booking Confirmed!",
-            text: `You have successfully booked the ${car.carModel}.`,
-            icon: "success",
+            title: "Already Booked!",
+            text: `You have already booked the ${car.carModel}.`,
+            icon: "info",
             confirmButtonText: "OK",
           });
+        } else {
+          axios
+            .post("http://localhost:5000/all-bookings", carWithEmail)
+            .then((res) => {
+              if (res.data.insertedId) {
+                Swal.fire({
+                  title: "Booking Confirmed!",
+                  text: `You have successfully booked the ${car.carModel}.`,
+                  icon: "success",
+                  confirmButtonText: "OK",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error.message);
+            });
         }
+      })
+      .catch((error) => {
+        console.error(error.message);
       });
   };
 
