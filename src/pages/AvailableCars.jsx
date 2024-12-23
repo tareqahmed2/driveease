@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const AvailableCars = () => {
   const [availableCars, setAvailableCars] = useState([]);
@@ -8,12 +9,16 @@ const AvailableCars = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
+  const { setLoading } = useAuth();
+
+  setLoading(true);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/allcars")
+      .get("http://localhost:5000/all-cars")
       .then((res) => setAvailableCars(res.data));
   }, []);
+  setLoading(false);
 
   const filteredCars = availableCars.filter((car) => {
     return (
@@ -43,7 +48,7 @@ const AvailableCars = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 w-11/12">
       <div className="mb-4 flex items-center">
         <input
           type="text"

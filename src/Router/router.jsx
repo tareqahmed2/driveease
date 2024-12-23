@@ -10,6 +10,7 @@ import MyCars from "../pages/MyCars";
 import MyBookings from "../pages/MyBookings";
 import ErrorPage from "../components/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
+import CarDetails from "../pages/CarDetails";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyBookings />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/car-details/:id",
+        element: (
+          <PrivateRoute>
+            <CarDetails />
           </PrivateRoute>
         ),
       },

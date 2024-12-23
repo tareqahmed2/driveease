@@ -42,7 +42,7 @@ const AddCar = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/allcars",
+        "http://localhost:5000/all-cars",
         carData,
         {
           headers: { "Content-Type": "application/json" },

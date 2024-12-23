@@ -124,6 +124,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     logOut,
     loading,
+    setLoading,
   };
 
   return (
