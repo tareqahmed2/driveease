@@ -1,24 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddCar = () => {
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
-    onDrop: (acceptedFiles) => {
-      console.log("Uploaded files:", acceptedFiles);
-    },
-  });
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  // const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  // const { getRootProps, getInputProps } = useDropzone({
+  //   accept: "image/*",
+  //   onDrop: (acceptedFiles) => {
+  //     console.log("Uploaded files:", acceptedFiles);
+  //   },
+  // });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // if (uploadedFiles.length === 0) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "No Image Uploaded",
+    //     text: "Please upload at least one image.",
+    //   });
+    //   return;
+    // }
+    const formData = new FormData(e.target);
+    const initialData = Object.fromEntries(formData.entries());
+    // uploadedFiles.forEach((file, index) => {
+    //   formData.append(`image_${index}`, file);
+    // });
+
+    const carData = {
+      ...initialData,
+      bookingCount: 0,
+      addedBy: user.email,
+      dateAdded: new Date().toISOString(),
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/allcars",
+        carData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Car added successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error adding car:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to add car",
+        text: "Something went wrong. Please try again.",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-base-200 py-10 px-4">
       <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-8">
         <h2 className="text-3xl font-semibold text-center mb-8">Add New Car</h2>
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-control">
             <label className="label">
               <span className="label-text">Car Model</span>
             </label>
             <input
+              name="carModel"
               type="text"
               className="input input-bordered w-full"
               placeholder="Enter car model"
@@ -31,6 +91,7 @@ const AddCar = () => {
               <span className="label-text">Daily Rental Price</span>
             </label>
             <input
+              name="dailyRentalPrice"
               type="number"
               className="input input-bordered w-full"
               placeholder="Enter price per day"
@@ -42,7 +103,11 @@ const AddCar = () => {
             <label className="label">
               <span className="label-text">Availability</span>
             </label>
-            <select className="select select-bordered w-full" required>
+            <select
+              name="availability"
+              className="select select-bordered w-full"
+              required
+            >
               <option value="Available">Available</option>
               <option value="Not Available">Not Available</option>
             </select>
@@ -53,6 +118,7 @@ const AddCar = () => {
               <span className="label-text">Vehicle Registration Number</span>
             </label>
             <input
+              name="vehicleRegistrationNumber"
               type="text"
               className="input input-bordered w-full"
               placeholder="Enter registration number"
@@ -65,6 +131,7 @@ const AddCar = () => {
               <span className="label-text">Features</span>
             </label>
             <input
+              name="features"
               type="text"
               className="input input-bordered w-full"
               placeholder="e.g., GPS, AC, Sunroof"
@@ -77,10 +144,11 @@ const AddCar = () => {
               <span className="label-text">Description</span>
             </label>
             <textarea
+              name="description"
               className="textarea textarea-bordered w-full"
               placeholder="Enter a detailed description"
               required
-            />
+            ></textarea>
           </div>
 
           <div className="form-control">
@@ -88,6 +156,7 @@ const AddCar = () => {
               <span className="label-text">Location</span>
             </label>
             <input
+              name="location"
               type="text"
               className="input input-bordered w-full"
               placeholder="Enter location"
@@ -95,7 +164,7 @@ const AddCar = () => {
             />
           </div>
 
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="label">
               <span className="label-text">Car Images</span>
             </label>
@@ -108,10 +177,21 @@ const AddCar = () => {
                 Drag & drop some files here, or click to select files
               </p>
             </div>
+          </div> */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Car Images</span>
+            </label>
+            <input
+              name="imageURL"
+              type="url"
+              className="input input-bordered w-full"
+              placeholder="Enter image url"
+              required
+            />
           </div>
-
           <div className="flex justify-center">
-            <button type="button" className="btn btn-primary w-full sm:w-1/2">
+            <button type="submit" className="btn btn-primary w-full sm:w-1/2">
               Save Car
             </button>
           </div>
