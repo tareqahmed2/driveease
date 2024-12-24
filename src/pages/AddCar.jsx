@@ -32,12 +32,27 @@ const AddCar = () => {
     // uploadedFiles.forEach((file, index) => {
     //   formData.append(`image_${index}`, file);
     // });
+    const options = {
+      timeZone: "Asia/Dhaka",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
+
+    const formatter = new Intl.DateTimeFormat("en-GB", options);
+
+    const currentTimeInDhaka = formatter.format(new Date());
 
     const carData = {
       ...initialData,
       bookingCount: 0,
+      bookingStatus: "pending",
       addedBy: user.email,
-      dateAdded: new Date().toISOString(),
+      dateAdded: currentTimeInDhaka,
     };
 
     try {

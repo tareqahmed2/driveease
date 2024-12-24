@@ -11,6 +11,8 @@ const MyBookings = () => {
   const [newBookingDate, setNewBookingDate] = useState("");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState(null);
+  const [startUpdateDate, setStartUpdateDate] = useState(null);
+  const [endUpdateDate, setEndUpdateDate] = useState(null);
 
   useEffect(() => {
     axios
@@ -28,21 +30,26 @@ const MyBookings = () => {
   };
 
   const handleSaveModifiedData = () => {
-    if (!newBookingDate) {
-      Swal.fire("Error", "Please select a new date", "error");
+    if (!startUpdateDate || !endUpdateDate) {
+      Swal.fire("Error", "Please select both new start and end dates", "error");
       return;
     }
 
     axios
       .patch(`http://localhost:5000/updateBooking/${modifiedBooking._id}`, {
-        dateAdded: newBookingDate,
+        startDate: startUpdateDate,
+        endDate: endUpdateDate,
       })
       .then((res) => {
         Swal.fire("Success", "Booking modified successfully", "success");
         setBookings((prev) =>
           prev.map((booking) =>
             booking._id === modifiedBooking._id
-              ? { ...booking, dateAdded: newBookingDate }
+              ? {
+                  ...booking,
+                  startDate: startUpdateDate,
+                  endDate: endUpdateDate,
+                }
               : booking
           )
         );
@@ -174,12 +181,21 @@ const MyBookings = () => {
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Modify Booking</h2>
-            <label className="block mb-2">New Booking Date</label>
+            <label className="block mb-2">New Start Date</label>
             <input
-              type="date"
-              value={newBookingDate}
-              onChange={(e) => setNewBookingDate(e.target.value)}
-              className="border p-2 mb-4 w-full"
+              type="text"
+              id="startDate"
+              placeholder="DD-MM-YYYY"
+              onChange={(e) => setStartUpdateDate(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
+            <label className="block mb-2">New End Date</label>
+            <input
+              type="text"
+              id="startDate"
+              placeholder="DD-MM-YYYY"
+              onChange={(e) => setEndUpdateDate(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
             <div className="flex justify-between">
               <button

@@ -71,7 +71,7 @@ const CarDetails = () => {
       CarId: selectedCar._id,
       addedBy: selectedCar.addedBy,
       availability: selectedCar.availability,
-      bookingCount: selectedCar.bookingCount,
+      bookingCount: selectedCar.bookingCount + 1,
       carModel: selectedCar.carModel,
       dailyRentalPrice: selectedCar.dailyRentalPrice,
       dateAdded: selectedCar.dateAdded,
@@ -87,7 +87,20 @@ const CarDetails = () => {
       endDate: endDate,
       BookingStatus: "pending",
     };
-
+    axios
+      .patch(`http://localhost:5000/all-cars/${selectedCar._id}`, {
+        bookingCount: carWithEmail.bookingCount,
+        ...carWithEmail,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.status === 200) {
+          console.log("Car booking count updated successfully!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating car booking count:", error);
+      });
     axios
       .get(`http://localhost:5000/all-bookings/${user.email}`)
       .then((res) => {

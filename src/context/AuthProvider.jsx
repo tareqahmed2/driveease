@@ -16,6 +16,8 @@ import { FaSpinner } from "react-icons/fa";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   console.log(user);
+  const [photoUrl, setPhotoUrl] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
 
@@ -55,17 +57,25 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const signUp = async (email, password, name, photo, navigate) => {
+  const signUp = (email, password, name, photo, navigate) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setUser(user);
-        console.log(userCredential.user);
+
+        return updateProfile(user, {
+          displayName: name,
+          photoURL: photo,
+        }).then(() => {
+          setUser({
+            ...user,
+            displayName: name,
+            photoURL: photo,
+          });
+          console.log("User registered and profile updated:", user);
+        });
       })
       .then(() => {
-        setLoading(false);
-
         logOut();
         navigate("/login");
       })
@@ -74,12 +84,12 @@ const AuthProvider = ({ children }) => {
         toast.error("Registration failed: " + error.message);
 
         navigate("/register");
-        return;
       })
       .finally(() => {
         setLoading(false);
       });
   };
+
   const signInUser = async (email, password, navigate) => {
     try {
       setLoading(true);

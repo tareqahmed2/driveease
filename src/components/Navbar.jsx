@@ -7,6 +7,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, logOut } = useAuth();
 
+  const handleLogout = () => {
+    logOut();
+    navigate("/login");
+  };
+
   const links = (
     <>
       <li>
@@ -25,22 +30,6 @@ const Navbar = () => {
           Available Cars
         </button>
       </li>
-      {/* <li>
-        <button
-          onClick={() => navigate("/login")}
-          className="text-gray-600 hover:text-accent font-bold"
-        >
-          Login
-        </button>
-      </li>
-      <li>
-        <button
-          onClick={() => navigate("/register")}
-          className="text-gray-600 hover:text-accent font-bold"
-        >
-          Register
-        </button>
-      </li> */}
       {user && (
         <>
           <li>
@@ -74,9 +63,9 @@ const Navbar = () => {
 
   return (
     <div className="bg-slate-200 sticky top-0 backdrop-blur-lg z-10">
-      <div className="navbar w-11/12 mx-auto flex justify-between">
+      <div className="navbar w-11/12 mx-auto flex flex-wrap items-center justify-between">
         {/* Navbar Start */}
-        <div className="navbar-start w-full md:w-1/4">
+        <div className="navbar-start w-auto lg:w-1/4 flex items-center gap-3">
           <div className="dropdown lg:hidden">
             <label tabIndex={0} className="btn btn-ghost px-0 md:px-1">
               <svg
@@ -101,31 +90,51 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <div className="flex gap-3 items-center">
-            <img
-              className="w-10 h-10  rounded-full cursor-pointer"
-              src={logo} // Replace with your logo image
-              alt="Logo"
-              onClick={() => navigate("/")}
-            />
-            <h2 className="text-2xl font-bold text-purple-700 hidden md:block">
-              DriveEase
-            </h2>
-          </div>
+          <img
+            className="w-10 h-10 rounded-full cursor-pointer"
+            src={logo}
+            alt="Logo"
+            onClick={() => navigate("/")}
+          />
+          <h2 className="text-2xl font-bold text-purple-700 hidden md:block">
+            DriveEase
+          </h2>
         </div>
 
         {/* Navbar Center */}
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-center hidden lg:flex w-auto lg:w-auto justify-center">
           <ul className="menu menu-horizontal px-0">{links}</ul>
         </div>
 
         {/* Navbar End */}
-        <div className="navbar-end w-full flex justify-end items-center gap-4">
-          {/* Placeholder for user avatar and log-out logic */}
+        <div className="navbar-end w-auto flex items-center gap-4">
           {user ? (
-            <button onClick={logOut} className="btn btn-secondary">
-              Logout
-            </button>
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost btn-circle avatar flex items-center"
+              >
+                <div className="w-10 rounded-full">
+                  <img src={user?.photoURL} alt="User Avatar" />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box w-52 p-2 shadow flex flex-col gap-2"
+              >
+                <p className="font-bold text-[12px] mb-2 text-purple-800">
+                  {user?.displayName}
+                </p>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="font-bold hover:text-accent text-white bg-purple-500"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
           ) : (
             <>
               <button
