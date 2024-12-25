@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
   const [photoUrl, setPhotoUrl] = useState(null);
 
   const [loading, setLoading] = useState(true);
+
   const provider = new GoogleAuthProvider();
 
   useEffect(() => {

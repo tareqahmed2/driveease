@@ -11,10 +11,7 @@ const RecentListings = () => {
     axios
       .get("http://localhost:5000/all-cars")
       .then((res) => {
-        const sortedCars = res.data.sort(
-          (a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)
-        );
-        setCars(sortedCars.slice(0, 8));
+        setCars(res.data.reverse().slice(0, 8));
       })
       .catch((error) => console.error("Error fetching cars:", error));
   }, []);

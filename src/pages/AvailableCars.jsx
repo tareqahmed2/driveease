@@ -90,17 +90,21 @@ const AvailableCars = () => {
         {sortedCars.map((car) => (
           <div
             key={car._id}
-            className="car-card border p-4 rounded-lg shadow-lg bg-white"
+            className="car-card border p-4 mb-2 rounded-lg shadow-lg bg-white"
           >
             <img
               src={car.imageURL}
               alt={car.carModel}
-              className="w-full h-48 object-cover rounded-lg mb-4"
+              className={`${
+                view === "grid" ? "w-full h-48  object-cover" : "w-full  h-full"
+              } rounded-lg mb-4`}
             />
+
             <h3 className="text-xl font-semibold">{car.carModel}</h3>
             <p className="text-gray-600">Price: ${car.dailyRentalPrice}/day</p>
             <p className="text-gray-600">Location: {car.location}</p>
             <p className="text-gray-600">Booking Count: {car.bookingCount}</p>
+
             <button
               onClick={() => navigate(`/car-details/${car._id}`)}
               className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg"

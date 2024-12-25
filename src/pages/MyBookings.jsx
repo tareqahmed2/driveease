@@ -2,6 +2,27 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const MyBookings = () => {
   const { user, setLoading } = useAuth();
@@ -29,9 +50,36 @@ const MyBookings = () => {
     setIsModalOpen(true);
   };
 
+  const isValidDateFormat = (dateString) => {
+    const regex = /^\d{2}-\d{2}-\d{4}$/;
+    return regex.test(dateString);
+  };
+
   const handleSaveModifiedData = () => {
     if (!startUpdateDate || !endUpdateDate) {
       Swal.fire("Error", "Please select both new start and end dates", "error");
+      return;
+    }
+
+    if (
+      !isValidDateFormat(startUpdateDate) ||
+      !isValidDateFormat(endUpdateDate)
+    ) {
+      Swal.fire(
+        "Error",
+        "Please enter valid dates in DD-MM-YYYY format",
+        "error"
+      );
+      return;
+    }
+
+    const startDateObj = new Date(
+      startUpdateDate.split("-").reverse().join("-")
+    );
+    const endDateObj = new Date(endUpdateDate.split("-").reverse().join("-"));
+
+    if (endDateObj < startDateObj) {
+      Swal.fire("Error", "End date cannot be earlier than start date", "error");
       return;
     }
 
@@ -64,7 +112,7 @@ const MyBookings = () => {
   };
 
   const confirmCancelBooking = () => {
-    if (bookingToCancel.BookingStatus === "cancel") {
+    if (bookingToCancel.bookingStatus === "Cancelled") {
       Swal.fire(
         "Already Cancelled",
         "This booking has already been cancelled.",
@@ -80,7 +128,7 @@ const MyBookings = () => {
         setBookings((prevBookings) =>
           prevBookings.map((booking) =>
             booking._id === bookingToCancel._id
-              ? { ...booking, BookingStatus: "cancel" }
+              ? { ...booking, bookingStatus: "Cancelled" }
               : booking
           )
         );
@@ -88,6 +136,11 @@ const MyBookings = () => {
         setIsCancelModalOpen(false);
       })
       .catch((err) => console.error(err));
+    axios
+      .patch(
+        `http://localhost:5000/updateAvailableBookingCount/${bookingToCancel.CarId}`
+      )
+      .then((res) => console.log(res.data));
   };
 
   const calculateDuration = (dateAdded, currentDate) => {
@@ -104,9 +157,29 @@ const MyBookings = () => {
     return `${days}d ${hours}h ${minutes}m`;
   };
 
+  const chartData = {
+    labels: bookings.map((booking) => booking.carModel),
+    datasets: [
+      {
+        label: "Daily Rental Price",
+        data: bookings.map((booking) => booking.dailyRentalPrice),
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
+      },
+    ],
+  };
+
   return (
     <div className="container w-11/12 mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-6">My Bookings</h2>
+      <h2 className="text-3xl text-center text-purple-600 font-semibold mb-6">
+        My Bookings
+      </h2>
+
+      <div className="mb-6">
+        <Line data={chartData} />
+      </div>
+
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
@@ -117,7 +190,6 @@ const MyBookings = () => {
               <th className="border px-4 py-2 font-semibold">Booking Date</th>
               <th className="border px-4 py-2 font-semibold">Start Date</th>
               <th className="border px-4 py-2 font-semibold">End data</th>
-
               <th className="border px-4 py-2 font-semibold">Total Price</th>
               <th className="border px-4 py-2 font-semibold">Booking Status</th>
               <th className="border px-4 py-2 font-semibold">Actions</th>
@@ -155,7 +227,7 @@ const MyBookings = () => {
                     ${booking.totalPrice.toFixed(2)}
                   </td>
 
-                  <td className="border px-4 py-2">{booking.BookingStatus}</td>
+                  <td className="border px-4 py-2">{booking.bookingStatus}</td>
                   <td className="border px-4 py-2">
                     <button
                       onClick={() => handleModifyData(booking)}
@@ -192,7 +264,7 @@ const MyBookings = () => {
             <label className="block mb-2">New End Date</label>
             <input
               type="text"
-              id="startDate"
+              id="endDate"
               placeholder="DD-MM-YYYY"
               onChange={(e) => setEndUpdateDate(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -232,7 +304,7 @@ const MyBookings = () => {
                 onClick={confirmCancelBooking}
                 className="bg-red-500 text-white px-4 py-2 rounded"
               >
-                Yes, Cancel
+                Yes
               </button>
             </div>
           </div>

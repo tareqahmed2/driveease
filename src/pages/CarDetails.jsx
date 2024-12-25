@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
-import { Result } from "postcss";
+import { toast } from "react-toastify";
 
 const CarDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const { user } = useAuth();
   const [carData, setCarData] = useState([]);
   const { setLoading } = useAuth();
@@ -14,9 +16,8 @@ const CarDetails = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedCar, setSelectedCar] = useState(null);
-
+  const [alreadyBooked, setAlreadyBooked] = useState(false);
   setLoading(true);
-
   useEffect(() => {
     axios
       .get(`http://localhost:5000/all-cars/${id}`)
@@ -33,7 +34,6 @@ const CarDetails = () => {
   setLoading(false);
 
   const handleBooking = async (car) => {
-    // Show modal for selecting dates
     setShowModal(true);
     setSelectedCar(car);
   };
@@ -43,6 +43,35 @@ const CarDetails = () => {
       Swal.fire({
         title: "Error",
         text: "Please select both start and end dates.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    if (
+      !/^\d{2}-\d{2}-\d{4}$/.test(startDate) ||
+      !/^\d{2}-\d{2}-\d{4}$/.test(endDate)
+    ) {
+      Swal.fire({
+        title: "Error",
+        text: "Please enter the date in DD-MM-YYYY format.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const [startDay, startMonth, startYear] = startDate.split("-");
+    const [endDay, endMonth, endYear] = endDate.split("-");
+
+    const startDateObj = new Date(`${startMonth}-${startDay}-${startYear}`);
+    const endDateObj = new Date(`${endMonth}-${endDay}-${endYear}`);
+
+    if (endDateObj < startDateObj) {
+      Swal.fire({
+        title: "Invalid Dates",
+        text: "End date cannot be earlier than start date.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -71,7 +100,7 @@ const CarDetails = () => {
       CarId: selectedCar._id,
       addedBy: selectedCar.addedBy,
       availability: selectedCar.availability,
-      bookingCount: selectedCar.bookingCount + 1,
+      bookingCount: selectedCar.bookingCount,
       carModel: selectedCar.carModel,
       dailyRentalPrice: selectedCar.dailyRentalPrice,
       dateAdded: selectedCar.dateAdded,
@@ -85,22 +114,9 @@ const CarDetails = () => {
       currentDate: currentTimeInDhaka,
       startDate: startDate,
       endDate: endDate,
-      BookingStatus: "pending",
+      bookingStatus: "Confirmed",
     };
-    axios
-      .patch(`http://localhost:5000/all-cars/${selectedCar._id}`, {
-        bookingCount: carWithEmail.bookingCount,
-        ...carWithEmail,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.status === 200) {
-          console.log("Car booking count updated successfully!");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating car booking count:", error);
-      });
+
     axios
       .get(`http://localhost:5000/all-bookings/${user.email}`)
       .then((res) => {
@@ -116,7 +132,35 @@ const CarDetails = () => {
             icon: "info",
             confirmButtonText: "OK",
           });
+          setAlreadyBooked(true);
+          navigate("/my-bookings");
+
+          return;
         } else {
+          setAlreadyBooked(false);
+
+          if (!alreadyBooked) {
+            axios
+              .patch(`http://localhost:5000/all-cars/${selectedCar._id}`, {
+                bookingStatus: carWithEmail.bookingStatus,
+                ...carWithEmail,
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  console.log(
+                    "Car booking count and status updated successfully!"
+                  );
+                }
+                console.log(res.data);
+              })
+              .catch((error) => {
+                console.error(
+                  "Error updating car booking count or status:",
+                  error
+                );
+              });
+          }
+
           axios
             .post("http://localhost:5000/all-bookings", carWithEmail)
             .then((res) => {
@@ -129,6 +173,7 @@ const CarDetails = () => {
                 });
               }
               setShowModal(false);
+              navigate("/my-bookings");
             })
             .catch((error) => {
               console.error(error.message);
@@ -227,7 +272,7 @@ const CarDetails = () => {
                     !/^\d{2}-\d{2}-\d{4}$/.test(startDate) ||
                     !/^\d{2}-\d{2}-\d{4}$/.test(endDate)
                   ) {
-                    alert("Please enter the date in DD-MM-YYYY format.");
+                    toast.warn("Please enter the date in DD-MM-YYYY format.");
                     return;
                   }
                   handleDateSelection();

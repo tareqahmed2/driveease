@@ -50,7 +50,7 @@ const AddCar = () => {
     const carData = {
       ...initialData,
       bookingCount: 0,
-      bookingStatus: "pending",
+      bookingStatus: "Pending",
       addedBy: user.email,
       dateAdded: currentTimeInDhaka,
     };
