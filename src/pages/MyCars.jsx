@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const MyCars = () => {
   const { user, setLoading } = useAuth();
@@ -15,10 +16,14 @@ const MyCars = () => {
   const [dailyRentalPrice, setDailyRentalPrice] = useState("");
   const [availability, setAvailability] = useState("Available");
   const [description, setDescription] = useState("");
-
+  const axiosSecure = useAxiosSecure();
   setLoading(true);
   useEffect(() => {
-    axios.get(`http://localhost:5000/my-cars/${email}`).then((res) => {
+    // axios
+    //   .get(`http://localhost:5000/my-cars/${email}`, {
+    //     withCredentials: true,
+    //   })
+    axiosSecure.get(`/my-cars/${email}`).then((res) => {
       setCars(res.data);
       sortCars(sortOrder, res.data);
     });
@@ -182,7 +187,7 @@ const MyCars = () => {
                         {car.carModel}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {car.dailyRentalPrice}
+                        {car.dailyRentalPrice} $
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
                         {car.availability}

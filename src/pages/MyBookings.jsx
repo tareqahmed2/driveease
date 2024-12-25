@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 ChartJS.register(
   CategoryScale,
@@ -34,10 +35,12 @@ const MyBookings = () => {
   const [bookingToCancel, setBookingToCancel] = useState(null);
   const [startUpdateDate, setStartUpdateDate] = useState(null);
   const [endUpdateDate, setEndUpdateDate] = useState(null);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/all-bookings/${user.email}`)
+    axiosSecure
+      // .get(`http://localhost:5000/all-bookings/${user.email}`)
+      .get(`all-bookings/${user.email}`)
       .then((res) => {
         setBookings(res.data);
       })
@@ -176,11 +179,7 @@ const MyBookings = () => {
         My Bookings
       </h2>
 
-      <div className="mb-6">
-        <Line data={chartData} />
-      </div>
-
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mb-6">
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-blue-400 text-white">
@@ -247,6 +246,9 @@ const MyBookings = () => {
             })}
           </tbody>
         </table>
+      </div>
+      <div className="">
+        <Line data={chartData} />
       </div>
 
       {isModalOpen && (

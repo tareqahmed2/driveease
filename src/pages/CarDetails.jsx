@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -17,10 +18,13 @@ const CarDetails = () => {
   const [endDate, setEndDate] = useState("");
   const [selectedCar, setSelectedCar] = useState(null);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
+  const axiosSecure = useAxiosSecure();
   setLoading(true);
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/all-cars/${id}`)
+    // axios
+    //   .get(`http://localhost:5000/all-cars/${id}`)
+    axiosSecure
+      .get(`/all-cars/${id}`)
       .then((res) => {
         setCarData(res.data);
         setLoading(false);
@@ -201,7 +205,7 @@ const CarDetails = () => {
                 <img
                   src={car.imageURL}
                   alt={car.carModel}
-                  className="w-full h-72 object-cover rounded-lg mb-4"
+                  className="w-full h-full object-cover rounded-lg mb-4"
                 />
               </div>
               <div className="car-info">

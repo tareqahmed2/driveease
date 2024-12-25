@@ -120,15 +120,15 @@ const Navbar = () => {
               </label>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box w-52 p-2 shadow flex flex-col gap-2"
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box w-32 p-2 shadow flex flex-col gap-2"
               >
-                <p className="font-bold text-[12px] mb-2 text-purple-800">
+                <p className="font-bold text-[12px] mb-2 text-purple-800 mx-auto">
                   {user?.displayName}
                 </p>
                 <li>
                   <button
                     onClick={handleLogout}
-                    className="font-bold hover:text-accent text-white bg-purple-500"
+                    className="font-bold mx-auto hover:text-accent text-white bg-purple-500"
                   >
                     Logout
                   </button>
