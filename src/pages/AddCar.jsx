@@ -57,7 +57,7 @@ const AddCar = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/all-cars",
+        "https://assignment11-server-side-mu.vercel.app/all-cars",
         carData,
         {
           headers: { "Content-Type": "application/json" },

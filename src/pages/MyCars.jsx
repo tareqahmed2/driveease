@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FaSpinner } from "react-icons/fa";
 
 const MyCars = () => {
-  const { user, setLoading } = useAuth();
+  const { user } = useAuth();
   const email = user.email;
   const [cars, setCars] = useState([]);
   const [sortOrder, setSortOrder] = useState("dateDesc");
@@ -17,8 +18,10 @@ const MyCars = () => {
   const [availability, setAvailability] = useState("Available");
   const [description, setDescription] = useState("");
   const axiosSecure = useAxiosSecure();
-  setLoading(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
+
     // axios
     //   .get(`http://localhost:5000/my-cars/${email}`, {
     //     withCredentials: true,
@@ -26,9 +29,9 @@ const MyCars = () => {
     axiosSecure.get(`/my-cars/${email}`).then((res) => {
       setCars(res.data);
       sortCars(sortOrder, res.data);
+      setLoading(false);
     });
   }, [email, sortOrder]);
-  setLoading(false);
 
   const sortCars = (order, data = cars) => {
     const sortedCars = [...data].sort((a, b) => {
@@ -123,6 +126,13 @@ const MyCars = () => {
       }
     });
   };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin text-3xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-200 py-10 px-4">

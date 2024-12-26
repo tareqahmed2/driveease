@@ -9,7 +9,7 @@ const RecentListings = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/all-cars")
+      .get("https://assignment11-server-side-mu.vercel.app/all-cars")
       .then((res) => {
         setCars(res.data.reverse().slice(0, 8));
       })

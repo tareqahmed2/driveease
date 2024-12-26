@@ -14,6 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FaSpinner } from "react-icons/fa";
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +27,7 @@ ChartJS.register(
 );
 
 const MyBookings = () => {
-  const { user, setLoading } = useAuth();
+  const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modifiedBooking, setModifiedBooking] = useState(null);
@@ -36,13 +37,15 @@ const MyBookings = () => {
   const [startUpdateDate, setStartUpdateDate] = useState(null);
   const [endUpdateDate, setEndUpdateDate] = useState(null);
   const axiosSecure = useAxiosSecure();
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     axiosSecure
-      // .get(`http://localhost:5000/all-bookings/${user.email}`)
+      // .get(`https://assignment11-server-side-mu.vercel.app/all-bookings/${user.email}`)
       .get(`all-bookings/${user.email}`)
       .then((res) => {
         setBookings(res.data);
+        setLoading(false);
       })
       .catch((err) => console.error(err));
   }, [user.email]);
@@ -87,10 +90,13 @@ const MyBookings = () => {
     }
 
     axios
-      .patch(`http://localhost:5000/updateBooking/${modifiedBooking._id}`, {
-        startDate: startUpdateDate,
-        endDate: endUpdateDate,
-      })
+      .patch(
+        `https://assignment11-server-side-mu.vercel.app/updateBooking/${modifiedBooking._id}`,
+        {
+          startDate: startUpdateDate,
+          endDate: endUpdateDate,
+        }
+      )
       .then((res) => {
         Swal.fire("Success", "Booking modified successfully", "success");
         setBookings((prev) =>
@@ -124,7 +130,9 @@ const MyBookings = () => {
       return;
     }
     axios
-      .patch(`http://localhost:5000/updateStatus/${bookingToCancel._id}`)
+      .patch(
+        `https://assignment11-server-side-mu.vercel.app/updateStatus/${bookingToCancel._id}`
+      )
       .then((res) => {
         Swal.fire("Cancelled!", "Your booking has been cancelled.", "success");
 
@@ -141,7 +149,7 @@ const MyBookings = () => {
       .catch((err) => console.error(err));
     axios
       .patch(
-        `http://localhost:5000/updateAvailableBookingCount/${bookingToCancel.CarId}`
+        `https://assignment11-server-side-mu.vercel.app/updateAvailableBookingCount/${bookingToCancel.CarId}`
       )
       .then((res) => console.log(res.data));
   };
@@ -172,6 +180,13 @@ const MyBookings = () => {
       },
     ],
   };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin text-3xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="container w-11/12 mx-auto p-4">

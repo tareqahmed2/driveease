@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FaSpinner } from "react-icons/fa";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -12,17 +13,18 @@ const CarDetails = () => {
 
   const { user } = useAuth();
   const [carData, setCarData] = useState([]);
-  const { setLoading } = useAuth();
+
   const [showModal, setShowModal] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedCar, setSelectedCar] = useState(null);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const axiosSecure = useAxiosSecure();
-  setLoading(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     // axios
-    //   .get(`http://localhost:5000/all-cars/${id}`)
+    //   .get(`https://assignment11-server-side-mu.vercel.app/all-cars/${id}`)
     axiosSecure
       .get(`/all-cars/${id}`)
       .then((res) => {
@@ -122,7 +124,9 @@ const CarDetails = () => {
     };
 
     axios
-      .get(`http://localhost:5000/all-bookings/${user.email}`)
+      .get(
+        `https://assignment11-server-side-mu.vercel.app/all-bookings/${user.email}`
+      )
       .then((res) => {
         const existingBooking = res.data.find(
           (booking) =>
@@ -145,10 +149,13 @@ const CarDetails = () => {
 
           if (!alreadyBooked) {
             axios
-              .patch(`http://localhost:5000/all-cars/${selectedCar._id}`, {
-                bookingStatus: carWithEmail.bookingStatus,
-                ...carWithEmail,
-              })
+              .patch(
+                `https://assignment11-server-side-mu.vercel.app/all-cars/${selectedCar._id}`,
+                {
+                  bookingStatus: carWithEmail.bookingStatus,
+                  ...carWithEmail,
+                }
+              )
               .then((res) => {
                 if (res.status === 200) {
                   console.log(
@@ -166,7 +173,10 @@ const CarDetails = () => {
           }
 
           axios
-            .post("http://localhost:5000/all-bookings", carWithEmail)
+            .post(
+              "https://assignment11-server-side-mu.vercel.app/all-bookings",
+              carWithEmail
+            )
             .then((res) => {
               if (res.data.insertedId) {
                 Swal.fire({
@@ -188,7 +198,13 @@ const CarDetails = () => {
         console.error(error.message);
       });
   };
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin text-3xl" />
+      </div>
+    );
+  }
   return (
     <div className="container w-11/12 mx-auto p-4">
       {carData.map((car, index) => {

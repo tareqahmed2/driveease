@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router-dom";
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://assignment11-server-side-mu.vercel.app",
   withCredentials: true,
 });
 const useAxiosSecure = () => {

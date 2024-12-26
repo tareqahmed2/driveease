@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { FaSpinner } from "react-icons/fa";
 
 const AvailableCars = () => {
   const [availableCars, setAvailableCars] = useState([]);
@@ -9,16 +10,18 @@ const AvailableCars = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
-  const { setLoading } = useAuth();
 
-  setLoading(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios
-      .get("http://localhost:5000/all-cars")
-      .then((res) => setAvailableCars(res.data));
+      .get("https://assignment11-server-side-mu.vercel.app/all-cars")
+      .then((res) => {
+        setAvailableCars(res.data);
+        setLoading(false);
+      });
   }, []);
-  setLoading(false);
 
   const filteredCars = availableCars.filter((car) => {
     return (
@@ -46,7 +49,13 @@ const AvailableCars = () => {
   const toggleView = () => {
     setView(view === "grid" ? "list" : "grid");
   };
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin text-3xl" />
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto p-4 w-11/12">
       <div className="mb-4 flex items-center">
