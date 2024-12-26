@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import { FaStar } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { useSpring, animated } from "@react-spring/web";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -45,85 +45,45 @@ const UserTestimonials = () => {
     pauseOnHover: true,
   };
 
+  const fadeInOut = useSpring({
+    loop: { reverse: true },
+    to: { opacity: 1 },
+    from: { opacity: 0 },
+    config: { duration: 2000 },
+  });
+
   return (
-    <motion.section
-      className="w-11/12 mx-auto my-16 px-6 py-12 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, delay: 0.3 }}
-    >
+    <section className="w-11/12 mx-auto my-16 px-6 py-12 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
       <h2 className="text-4xl font-semibold text-center mb-12 text-white">
         What Our Customers Say
       </h2>
 
       <Slider {...settings} className="px-4">
         {testimonials.map((testimonial, index) => (
-          <motion.div
+          <animated.div
             key={testimonial.id}
+            style={fadeInOut}
             className={`flex flex-col items-center text-center p-8 rounded-lg shadow-xl hover:scale-105 transition-all duration-300 ease-in-out ${testimonial.background}`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              scale: 1.1,
-            }}
-            transition={{
-              duration: 1.2,
-              ease: "easeOut",
-              delay: 0.3 + index * 0.2,
-            }}
           >
-            <motion.img
+            <animated.img
               src={testimonial.image}
               alt={testimonial.name}
               className="w-28 h-28 mx-auto rounded-full mb-6 shadow-lg"
-              initial={{ scale: 0 }}
-              animate={{
-                scale: 1,
-                rotate: index % 2 === 0 ? 10 : -10,
-              }}
-              transition={{
-                duration: 0.8,
-                type: "spring",
-                stiffness: 120,
-                damping: 25,
-              }}
-              whileHover={{
-                scale: 1.1,
-                rotate: 0,
-              }}
+              style={fadeInOut}
             />
-            <motion.h3
-              className="text-2xl font-bold mb-3 text-gray-800 hover:text-indigo-500 cursor-pointer transition-colors duration-300"
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              whileHover={{ color: "#4C51BF" }}
-            >
+            <h3 className="text-2xl font-bold mb-3 text-gray-800 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
               {testimonial.name}
-            </motion.h3>
-            <motion.div
-              className="flex mb-3 justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-            >
+            </h3>
+            <div className="flex mb-3 justify-center">
               {[...Array(testimonial.rating)].map((_, idx) => (
                 <FaStar key={idx} className="text-yellow-400 text-lg" />
               ))}
-            </motion.div>
-            <motion.p
-              className="text-lg text-gray-700 italic"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-            >
-              {testimonial.review}
-            </motion.p>
-          </motion.div>
+            </div>
+            <p className="text-lg text-gray-700 italic">{testimonial.review}</p>
+          </animated.div>
         ))}
       </Slider>
-    </motion.section>
+    </section>
   );
 };
 

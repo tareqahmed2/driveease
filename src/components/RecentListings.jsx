@@ -16,6 +16,53 @@ const RecentListings = () => {
       .catch((error) => console.error("Error fetching cars:", error));
   }, []);
   setLoading(false);
+  const calculateDaysAgo = (dateAdded) => {
+    if (!dateAdded) {
+      return "Date not available";
+    }
+
+    try {
+      const regex =
+        /^(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i;
+      const match = dateAdded.match(regex);
+
+      if (!match) {
+        return "Invalid date format";
+      }
+
+      const [_, day, month, year, hours, minutes, seconds, period] = match;
+
+      let hour = parseInt(hours, 10);
+      if (period === "PM" && hour !== 12) {
+        hour += 12;
+      } else if (period === "AM" && hour === 12) {
+        hour = 0;
+      }
+
+      const formattedDate = new Date(
+        `${year}-${month}-${day}T${hour
+          .toString()
+          .padStart(2, "0")}:${minutes}:${seconds}`
+      );
+
+      if (isNaN(formattedDate.getTime())) {
+        return "Invalid date";
+      }
+
+      const currentDate = new Date();
+      const differenceInTime = currentDate - formattedDate;
+      const differenceInDays = Math.floor(
+        differenceInTime / (1000 * 60 * 60 * 24)
+      );
+
+      return differenceInDays === 0
+        ? "Added today"
+        : `Added ${differenceInDays} days ago`;
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return "Error calculating days ago";
+    }
+  };
 
   return (
     <section className="my-16 px-6 w-11/12 mx-auto">
@@ -36,7 +83,9 @@ const RecentListings = () => {
             />
             <div className="p-4">
               <h3 className="text-xl font-semibold mb-2">{car.carModel}</h3>
-              <p className="text-gray-600 mb-2">${car.dailyRentalPrice}/day</p>
+              <p className="text-gray-600 mb-2">
+                Per Day Price: ${car.dailyRentalPrice}/day
+              </p>
               <p
                 className={`text-sm font-medium ${
                   car.availability === "Available"
@@ -46,7 +95,13 @@ const RecentListings = () => {
               >
                 {car.availability}
               </p>
-              <p className="text-gray-500 text-sm">{car.dateAdded}</p>
+              <p className="text-gray-500 text-sm">
+                Booking Count:{car.bookingCount}
+              </p>
+
+              <p className="text-gray-500 text-sm">
+                {calculateDaysAgo(car.dateAdded)}
+              </p>
             </div>
           </div>
         ))}

@@ -21,9 +21,10 @@ const CarDetails = () => {
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    setLoading(true);
     // axios
+    setLoading(true);
     //   .get(`https://assignment11-server-side-mu.vercel.app/all-cars/${id}`)
     axiosSecure
       .get(`/all-cars/${id}`)
@@ -36,8 +37,6 @@ const CarDetails = () => {
         setLoading(false);
       });
   }, [id]);
-
-  setLoading(false);
 
   const handleBooking = async (car) => {
     setShowModal(true);

@@ -12,20 +12,21 @@ const MyCars = () => {
   const [sortOrder, setSortOrder] = useState("dateDesc");
   const [modalOpen, setModalOpen] = useState(false);
   const [currentCar, setCurrentCar] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [carModel, setCarModel] = useState("");
   const [dailyRentalPrice, setDailyRentalPrice] = useState("");
   const [availability, setAvailability] = useState("Available");
   const [description, setDescription] = useState("");
+  const [vehicleRegistrationNumber, setVehicleRegistrationNumber] =
+    useState("");
+  const [features, setFeatures] = useState("");
+  const [images, setImages] = useState("");
+  const [location, setLocation] = useState("");
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setLoading(true);
 
-    // axios
-    //   .get(`http://localhost:5000/my-cars/${email}`, {
-    //     withCredentials: true,
-    //   })
     axiosSecure.get(`/my-cars/${email}`).then((res) => {
       setCars(res.data);
       sortCars(sortOrder, res.data);
@@ -61,6 +62,10 @@ const MyCars = () => {
     setDailyRentalPrice(car.dailyRentalPrice);
     setAvailability(car.availability);
     setDescription(car.description);
+    setVehicleRegistrationNumber(car.vehicleRegistrationNumber);
+    setFeatures(car.features);
+    setImages(car.images);
+    setLocation(car.location);
     setModalOpen(true);
   };
 
@@ -71,10 +76,17 @@ const MyCars = () => {
       dailyRentalPrice,
       availability,
       description,
+      vehicleRegistrationNumber,
+      features,
+      images,
+      location,
     };
 
     axios
-      .patch(`http://localhost:5000/my-cars/${currentCar._id}`, updatedCar)
+      .patch(
+        `https://assignment11-server-side-mu.vercel.app/my-cars/${currentCar._id}`,
+        updatedCar
+      )
       .then((res) => {
         if (res.data.modifiedCount) {
           setCars((cars) =>
@@ -100,9 +112,6 @@ const MyCars = () => {
   };
 
   const handleDelete = (carId) => {
-    setDeleteModalOpen(true);
-    setCurrentCar(carId);
-    console.log(carId);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -113,19 +122,24 @@ const MyCars = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:5000/my-cars/${carId}`).then((res) => {
-          if (res.data.deletedCount) {
-            setCars((cars) => cars.filter((car) => car._id !== carId));
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-          }
-        });
+        axios
+          .delete(
+            `https://assignment11-server-side-mu.vercel.app/my-cars/${carId}`
+          )
+          .then((res) => {
+            if (res.data.deletedCount) {
+              setCars((cars) => cars.filter((car) => car._id !== carId));
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          });
       }
     });
   };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -178,7 +192,10 @@ const MyCars = () => {
                     <th className="border border-gray-300 p-2">
                       Daily Rental Price
                     </th>
-                    <th className="border border-gray-300 p-2">Availability</th>
+                    <th className="border border-gray-300 p-2">Availability</th>{" "}
+                    <th className="border border-gray-300 p-2">
+                      Booking Count
+                    </th>
                     <th className="border border-gray-300 p-2">Date Added</th>
                     <th className="border border-gray-300 p-2">Actions</th>
                   </tr>
@@ -201,6 +218,9 @@ const MyCars = () => {
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
                         {car.availability}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {car.bookingCount}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
                         {car.dateAdded}
@@ -228,47 +248,86 @@ const MyCars = () => {
         )}
 
         {modalOpen && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center h-[100vh] my-10">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4">
               <h3 className="text-xl font-semibold">Update Car Details</h3>
               <form onSubmit={handleUpdate}>
+                <div className="flex flex-col md:flex-row">
+                  <input
+                    type="text"
+                    className="input input-bordered w-full mt-4"
+                    placeholder="Car Model"
+                    required
+                    onChange={(e) => setCarModel(e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    className="input input-bordered w-full mt-4"
+                    placeholder="Daily Rental Price"
+                    required
+                    onChange={(e) => setDailyRentalPrice(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex flex-col md:flex-row">
+                  <select
+                    className="select select-bordered w-full mt-4"
+                    required
+                    onChange={(e) => setAvailability(e.target.value)}
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Not Available">Not Available</option>
+                  </select>
+                  <input
+                    required
+                    type="text"
+                    className="input input-bordered w-full mt-4"
+                    placeholder="Features (e.g., GPS, AC)"
+                    onChange={(e) => setFeatures(e.target.value)}
+                  />
+                </div>
+                <textarea
+                  required
+                  className="textarea textarea-bordered w-full mt-4"
+                  placeholder="Description"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <div className="flex flex-col md:flex-row">
+                  <input
+                    required
+                    type="text"
+                    className="input input-bordered w-full mt-4"
+                    placeholder="Vehicle Registration Number"
+                    onChange={(e) =>
+                      setVehicleRegistrationNumber(e.target.value)
+                    }
+                  />
+                  <input
+                    required
+                    type="text"
+                    className="input input-bordered w-full mt-4"
+                    placeholder="Location"
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                </div>
+
                 <input
                   type="text"
                   className="input input-bordered w-full mt-4"
-                  placeholder="Car Model"
-                  value={carModel}
-                  onChange={(e) => setCarModel(e.target.value)}
+                  placeholder="Images (URL)"
+                  required
+                  onChange={(e) => setImages(e.target.value)}
                 />
-                <input
-                  type="number"
-                  className="input input-bordered w-full mt-4"
-                  placeholder="Daily Rental Price"
-                  value={dailyRentalPrice}
-                  onChange={(e) => setDailyRentalPrice(e.target.value)}
-                />
-                <select
-                  className="select select-bordered w-full mt-4"
-                  value={availability}
-                  onChange={(e) => setAvailability(e.target.value)}
-                >
-                  <option value="Available">Available</option>
-                  <option value="Not Available">Not Available</option>
-                </select>
-                <textarea
-                  className="textarea textarea-bordered w-full mt-4"
-                  placeholder="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+
                 <button type="submit" className="btn btn-primary w-full mt-4">
                   Save Changes
                 </button>
               </form>
               <button
-                className="btn btn-secondary w-full mt-4"
+                className="btn btn-secondary w-full mt-2"
                 onClick={() => setModalOpen(false)}
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>
