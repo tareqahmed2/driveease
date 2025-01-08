@@ -23,7 +23,7 @@ const MyCars = () => {
   const [location, setLocation] = useState("");
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
-
+  const [fetchData, setFetchData] = useState(false);
   useEffect(() => {
     setLoading(true);
 
@@ -31,8 +31,9 @@ const MyCars = () => {
       setCars(res.data);
       sortCars(sortOrder, res.data);
       setLoading(false);
+      setFetchData(false);
     });
-  }, [email, sortOrder]);
+  }, [email, sortOrder, fetchData]);
 
   const sortCars = (order, data = cars) => {
     const sortedCars = [...data].sort((a, b) => {
@@ -89,6 +90,7 @@ const MyCars = () => {
       )
       .then((res) => {
         if (res.data.modifiedCount) {
+          setFetchData(true);
           setCars((cars) =>
             cars.map((car) =>
               car._id === currentCar._id ? { ...car, ...updatedCar } : car

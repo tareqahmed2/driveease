@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
         axios
           .post(
             "https://assignment11-server-side-mu.vercel.app/logout",
-
+            {},
             { withCredentials: true }
           )
           .then((res) => {

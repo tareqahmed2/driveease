@@ -247,11 +247,22 @@ const CarDetails = () => {
       {/* Modal for date selection */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h3 className="text-2xl font-semibold mb-4">
-              Select Booking Dates
-            </h3>
+          <div className="bg-white p-6 my-4 rounded-lg w-96">
+            <div className="car-image">
+              <h2 className="text-2xl font-semibold mb-4">
+                {selectedCar.carModel}
+              </h2>
+              <img
+                src={selectedCar.imageURL}
+                alt={selectedCar.carModel}
+                className="w-full h-32 object-cover rounded-lg mb-4"
+              />
+            </div>
+
             <div className="mb-4">
+              <h3 className="text-2xl font-semibold mb-4">
+                Select Booking Dates
+              </h3>
               <label htmlFor="startDate" className="block text-gray-700">
                 Start Date (DD-MM-YYYY)
               </label>

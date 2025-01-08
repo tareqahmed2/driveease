@@ -5,23 +5,49 @@ import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { signInUser, signInWithGoogle } = useAuth();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    // console.log(email, password);
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    setError("");
+
     signInUser(email, password, navigate)
       .then((result) => {
         console.log("sign in", result.user);
+        navigate("/home");
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Sign in error:", error);
+        setError("Failed to sign in. Please try again.");
       });
   };
 
@@ -32,6 +58,8 @@ const Login = () => {
           Login Now!
         </h2>
         <form onSubmit={handleSubmit} className="card-body">
+          {error && <p className="text-red-500 text-center">{error}</p>}
+
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
@@ -64,17 +92,14 @@ const Login = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">
-                Forgot password?
-              </a>
-            </label>
           </div>
+
           <div className="form-control mt-6">
             <button className="btn btn-accent border-none bg-[#FF00D3]">
               Login
             </button>
           </div>
+
           <button
             onClick={() => signInWithGoogle(navigate)}
             className="btn flex items-center"
@@ -85,6 +110,7 @@ const Login = () => {
             Login With Google
           </button>
         </form>
+
         <div className="flex justify-center items-center">
           <p className="my-5 font-bold">
             Don't have an account?{" "}

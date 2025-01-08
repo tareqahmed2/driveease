@@ -1,35 +1,116 @@
-# Car Rental System
+# 🚗 Car Rental System
 
-## **Project Overview**
+**Live Link:** [Car Rental System](https://driveease1.netlify.app/)  
+**Client Repository:** [GitHub - Client](https://github.com/tareqahmed2/driveease)  
+**Server Repository:** [GitHub - Server](https://github.com/tareqahmed2/driveease-server-side)
 
-Welcome to the Car Rental System! This platform offers a seamless experience for booking, managing, and exploring a wide variety of cars available for rent. Built with modern web technologies, the frontend ensures an intuitive, responsive, and user-friendly interface.
+---
 
-## **Live URL**
+## Project Overview
 
-[https://driveease1.netlify.app](#)
+The Car Rental System is a feature-rich, user-friendly platform designed to streamline car rentals for users. This system enables seamless car bookings, user authentication, and efficient management of car inventory.
 
-## **Features**
+**Main Technologies Used:**
 
-- **Responsive Design:** Fully optimized for desktop, tablet, and mobile devices.
-- **Dynamic Pages:** Real-time updates on car availability and bookings.
-- **Authentication:** Secure login and registration with Firebase and JWT.
-- **Sorting & Filtering:** Advanced sorting options and search functionalities for cars.
-- **Interactive UI:** Includes animations and hover effects for a better user experience.
-- **Private Routes:** Protected pages for managing user-added cars and bookings.
+- **Frontend:** HTML, CSS, JavaScript, React.js, Tailwind CSS
+- **Backend:** Node.js, Express.js, MongoDB
+- **Authentication:** Firebase Authentication, JWT
+- **Charting Library:** Recharts
+- **Deployment:** Vercel (Client), Render (Server)
 
-## **Technologies Used**
+---
 
-- **HTML5** and **CSS3**
-- **JavaScript (ES6+)**
-- **React.js**: For building reusable UI components.
-- **React Router DOM**: For routing and navigation.
-- **Recharts**: For data visualization on the My Bookings page.
-- **Firebase Authentication**: For secure user authentication.
-- **Tailwind CSS**: For consistent and responsive styling.
+## Key Features
 
-## **Setup and Installation**
+### User Features
 
-1. Clone the repository:
+- **Car Management:** Users can add, update, and delete cars.
+- **Booking System:** Search and book cars based on availability.
+- **Real-time Updates:** Real-time booking status and availability updates.
+- **Responsive Design:** Fully responsive for mobile, tablet, and desktop.
+- **Sorting:** Sort cars by price or date added.
+- **Data Visualization:** View rental price trends on the "My Bookings" page using Recharts.
+- **Private Routes:** Secured pages like "Add Car," "My Cars," and "My Bookings" for authenticated users.
+
+### Admin Features
+
+- **JWT Authentication:** Secure authentication for private routes and API access.
+- **Server-side Pagination:** Efficiently manage large datasets on the "My Cars" page.
+- **Incremental Updates:** Track car bookings using MongoDB `$inc` operators.
+
+---
+
+## Pages and Functionalities
+
+1. **Home Page:**
+
+   - **Banner Section:** Eye-catching heading and call-to-action button.
+   - **Why Choose Us Section:** Highlights platform benefits with icons.
+   - **Recent Listings Section:** Displays latest car listings in a grid layout.
+   - **Special Offers Section:** Showcases deals with animations.
+
+2. **Available Cars Page:**
+
+   - Toggle between grid and list views.
+   - Search cars by model, brand, or location.
+   - Sorting by price or date added.
+   - "Book Now" button for quick booking.
+
+3. **Add Car Page (Private):**
+
+   - Add new cars with details like model, price, features, and availability.
+
+4. **My Cars Page (Private):**
+
+   - Manage added cars with sorting, updating, and deleting options.
+   - Real-time table updates after actions.
+
+5. **My Bookings Page (Private):**
+
+   - Tabular layout with details of all bookings.
+   - Modify booking dates or cancel bookings.
+   - Visualize daily rental prices using Recharts.
+
+6. **Authentication:**
+
+   - Login and Registration using Firebase and Google Sign-In.
+   - JWT for secured API access.
+
+7. **Error Page:**
+   - A custom 404 page with navigation back to Home.
+
+---
+
+## Dependencies
+
+### Frontend
+
+- **React.js:** Core frontend framework.
+- **Tailwind CSS:** Utility-first CSS framework.
+- **Recharts:** Data visualization library.
+- **React Router DOM:** Client-side routing.
+
+### Backend
+
+- **Node.js & Express.js:** Backend runtime and framework.
+- **MongoDB:** Database for storing data.
+- **Firebase Admin SDK:** Authentication handling.
+- **dotenv:** Environment variable management.
+
+---
+
+## How to Run Locally
+
+### Prerequisites
+
+- **Node.js** and **npm/yarn** installed.
+- **MongoDB** setup locally or via a cloud service.
+- Firebase project credentials.
+
+### Steps
+
+1. **Clone the repositories:**
    ```bash
-   git clone https://github.com/programming-hero-web-course2/b10a11-client-side-tareqahmed2
+   git clone https://github.com/tareqahmed2/driveease-server-side
+   git clone https://github.com/tareqahmed2/driveease
    ```

@@ -40,9 +40,11 @@ const MyBookings = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
-    axiosSecure
+    axios
       // .get(`https://assignment11-server-side-mu.vercel.app/all-bookings/${user.email}`)
-      .get(`all-bookings/${user.email}`)
+      .get(
+        `https://assignment11-server-side-mu.vercel.app/all-bookings/${user.email}`
+      )
       .then((res) => {
         setBookings(res.data);
         setLoading(false);
