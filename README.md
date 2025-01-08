@@ -6,6 +6,8 @@
 
 ---
 
+![Homepage Screenshot](./src/assets/driveaseprofile.png)
+
 ## Project Overview
 
 The Car Rental System is a feature-rich, user-friendly platform designed to streamline car rentals for users. This system enables seamless car bookings, user authentication, and efficient management of car inventory.
