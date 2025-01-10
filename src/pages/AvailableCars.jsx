@@ -58,6 +58,18 @@ const AvailableCars = () => {
   }
   return (
     <div className="container mx-auto p-4 w-11/12">
+      <div>
+        <h2 className="text-purple-600 text-center font-extrabold text-4xl mb-5">
+          Our Available Cars
+        </h2>
+
+        <p className="w-4/5 mx-auto text-center text-gray-600 mb-12">
+          Browse through our diverse collection of vehicles, carefully selected
+          to meet your travel needs. Whether you're looking for an economy car,
+          a luxurious sedan, or a spacious SUV, we have the perfect ride to
+          ensure comfort and style for every journey.
+        </p>
+      </div>
       <div className="mb-4 flex items-center">
         <input
           type="text"
@@ -92,7 +104,7 @@ const AvailableCars = () => {
       <div
         className={`${
           view === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             : "block"
         }`}
       >
@@ -108,6 +120,12 @@ const AvailableCars = () => {
                 view === "grid" ? "w-full h-48  object-cover" : "w-full  h-full"
               } rounded-lg mb-4`}
             />
+            {/* <div
+              className={`${
+                view === "grid" ? "w-full h-48 object-cover" : "w-full h-full"
+              } rounded-lg mb-4 bg-no-repeat bg-center`}
+              style={{ backgroundImage: `url(${car.imageURL})` }}
+            ></div> */}
 
             <h3 className="text-xl font-semibold">{car.carModel}</h3>
             <p className="text-gray-600">Price: ${car.dailyRentalPrice}/day</p>

@@ -66,11 +66,14 @@ const RecentListings = () => {
 
   return (
     <section className="my-16 px-6 w-11/12 mx-auto">
-      <h2 className="text-4xl text-purple-800 font-semibold text-center mb-12">
+      <h2 className="text-4xl text-purple-800 font-semibold text-center mb-4">
         Recent Listings
       </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <p className="text-gray-600 text-xl text-center  mb-12">
+        Explore our recent listings of top-quality, well-maintained vehicles,
+        perfect for every journey and occasion.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
         {cars.map((car) => (
           <div
             key={car._id}
@@ -81,6 +84,10 @@ const RecentListings = () => {
               alt={car.carModel}
               className="w-full h-48 object-cover"
             />
+            {/* <div
+              className="w-full h-48  bg-no-repeat bg-center"
+              style={{ backgroundImage: `url(${car.imageURL})` }}
+            ></div> */}
             <div className="p-4">
               <h3 className="text-xl font-semibold mb-2">{car.carModel}</h3>
               <p className="text-gray-600 mb-2">

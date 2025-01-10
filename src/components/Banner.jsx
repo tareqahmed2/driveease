@@ -3,7 +3,7 @@ import bgImg from "../assets/bg-img.jpg";
 const Banner = () => {
   return (
     <div
-      className="w-11/12 mx-auto my-10 rounded-2xl relative bg-cover bg-center bg-no-repeat py-40 text-white"
+      className="w-11/12 mx-auto my-10 rounded-2xl relative bg-cover bg-center bg-no-repeat py-40 text-white h-[60vh]"
       style={{
         backgroundImage: `url(${bgImg})`,
       }}

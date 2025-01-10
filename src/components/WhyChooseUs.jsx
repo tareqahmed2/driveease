@@ -9,11 +9,15 @@ import {
 const WhyChooseUs = () => {
   return (
     <section className="my-16 px-6 w-11/12 mx-auto">
-      <h2 className="text-3xl  text-center mb-12 text-purple-800 font-bold">
+      <h2 className="text-3xl  text-center mb-3 text-purple-800 font-bold">
         Why Choose Us?
       </h2>
+      <p class="text-center text-xl mb-4">
+        Your trusted partner for reliable, affordable, and hassle-free car
+        rental services, tailored to meet your every need.
+      </p>
 
-      <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10 gap-12">
         {/* Wide Variety of Cars */}
         <div className="flex flex-col items-center text-center">
           <FaCar className="text-5xl text-blue-500 mb-4" />

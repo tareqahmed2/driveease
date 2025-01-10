@@ -44,6 +44,15 @@ const CarDetails = () => {
   };
 
   const handleDateSelection = async () => {
+    if (selectedCar.availability === "Unavailable") {
+      Swal.fire({
+        title: "Error",
+        text: `${selectedCar.carModel} is not available right now!`,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
     if (!startDate || !endDate) {
       Swal.fire({
         title: "Error",

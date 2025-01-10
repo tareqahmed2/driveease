@@ -83,14 +83,20 @@ const SpecialOffers = () => {
   const navigate = useNavigate();
   return (
     <section className="my-16 px-6">
-      <h2 className="text-4xl font-semibold text-center mb-12">
+      <h2 className="text-4xl text-purple-500 font-semibold text-center mb-5">
         Special Offers
       </h2>
+      <p className="text-center text-gray-700 w-4/5 mx-auto mb-12">
+        Unlock exclusive deals and discounts on car rentals! In this section,
+        explore our limited-time offers designed to give you the best value for
+        your next trip. Don’t miss out on these fantastic savings and book your
+        ride today!
+      </p>
       <div className="flex flex-wrap justify-center gap-6">
         {specialOffers.map((offer) => (
           <motion.div
             key={offer.id}
-            className="w-full sm:w-80 bg-white rounded-lg shadow-xl p-8 flex flex-col items-center text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+            className="w-full sm:w-80 bg-white rounded-lg shadow-xl p-8 flex flex-col items-center text-center transform transition-all duration-100 hover:scale-105 hover:shadow-2xl"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", stiffness: 80, delay: 0.2 }}

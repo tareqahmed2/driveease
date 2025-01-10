@@ -54,9 +54,15 @@ const UserTestimonials = () => {
 
   return (
     <section className="w-11/12 mx-auto my-16 px-6 py-12 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-      <h2 className="text-4xl font-semibold text-center mb-12 text-white">
+      <h2 className="text-4xl font-semibold text-center mb-4  text-white">
         What Our Customers Say
       </h2>
+      <p className="text-white text-center mb-12 w-4/5 mx-auto">
+        Discover the real stories behind our customer satisfaction! In this
+        section, we share honest feedback and testimonials from those who have
+        experienced our top-notch car rental services. See how we've helped them
+        enjoy seamless, reliable, and memorable journeys.
+      </p>
 
       <Slider {...settings} className="px-4">
         {testimonials.map((testimonial, index) => (
