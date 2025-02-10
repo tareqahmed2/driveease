@@ -10,7 +10,7 @@ import logo from "../assets/driveease.jpeg";
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-10">
-      <div className="container mx-auto text-center">
+      <div className="max-w-7xl mx-auto text-center">
         {/* Logo and Website Name */}
         <div className="mb-6">
           <img

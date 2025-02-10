@@ -214,7 +214,7 @@ const CarDetails = () => {
     );
   }
   return (
-    <div className="container w-11/12 mx-auto p-4">
+    <div className="containercontainer mx-auto p-4">
       {carData.map((car, index) => {
         return (
           <div

@@ -57,7 +57,7 @@ const AvailableCars = () => {
     );
   }
   return (
-    <div className="container mx-auto p-4 w-11/12">
+    <div className="max-w-7xl mx-auto p-4">
       <div>
         <h2 className="text-purple-600 text-center font-extrabold text-4xl mb-5">
           Our Available Cars

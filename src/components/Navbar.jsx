@@ -1,8 +1,15 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import logo from "../assets/driveease.jpeg";
 import useAuth from "../hooks/useAuth";
-
+import {
+  FaHome,
+  FaCar,
+  FaSignInAlt,
+  FaPlusCircle,
+  FaCarAlt,
+  FaClipboardList,
+} from "react-icons/fa";
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logOut } = useAuth();
@@ -15,46 +22,82 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <button
-          onClick={() => navigate("/")}
-          className="text-gray-600 hover:text-accent font-bold"
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `flex items-center gap-2 font-bold ${
+              isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+            }`
+          }
         >
-          Home
-        </button>
+          <FaHome /> Home
+        </NavLink>
       </li>
       <li>
-        <button
-          onClick={() => navigate("/available-cars")}
-          className="text-gray-600 hover:text-accent font-bold"
+        <NavLink
+          to="/available-cars"
+          className={({ isActive }) =>
+            `flex items-center gap-2 font-bold ${
+              isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+            }`
+          }
         >
-          Available Cars
-        </button>
+          <FaCar /> Available Cars
+        </NavLink>
       </li>
+      {!user && (
+        <>
+          <li>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `flex items-center gap-2 font-bold ${
+                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+                }`
+              }
+            >
+              <FaSignInAlt /> Login
+            </NavLink>
+          </li>
+        </>
+      )}
       {user && (
         <>
           <li>
-            <button
-              onClick={() => navigate("/add-car")}
-              className="text-gray-600 hover:text-accent font-bold"
+            <NavLink
+              to="/add-car"
+              className={({ isActive }) =>
+                `flex items-center gap-2 font-bold ${
+                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+                }`
+              }
             >
-              Add Car
-            </button>
+              <FaPlusCircle /> Add Car
+            </NavLink>
           </li>
           <li>
-            <button
-              onClick={() => navigate("/my-cars")}
-              className="text-gray-600 hover:text-accent font-bold"
+            <NavLink
+              to="/my-cars"
+              className={({ isActive }) =>
+                `flex items-center gap-2 font-bold ${
+                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+                }`
+              }
             >
-              My Cars
-            </button>
+              <FaCarAlt /> My Cars
+            </NavLink>
           </li>
           <li>
-            <button
-              onClick={() => navigate("/my-bookings")}
-              className="text-gray-600 hover:text-accent font-bold"
+            <NavLink
+              to="/my-bookings"
+              className={({ isActive }) =>
+                `flex items-center gap-2 font-bold ${
+                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
+                }`
+              }
             >
-              My Bookings
-            </button>
+              <FaClipboardList /> My Bookings
+            </NavLink>
           </li>
         </>
       )}
@@ -63,7 +106,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-slate-200 sticky top-0 backdrop-blur-lg z-50">
-      <div className="navbar w-11/12 mx-auto flex flex-wrap items-center justify-between">
+      <div className="navbar  max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between">
         {/* Navbar Start */}
         <div className="navbar-start w-auto lg:w-1/4 flex items-center gap-3">
           <div className="dropdown lg:hidden">
@@ -137,12 +180,12 @@ const Navbar = () => {
             </div>
           ) : (
             <>
-              <button
+              {/* <button
                 onClick={() => navigate("/login")}
                 className="btn btn-secondary"
               >
                 Login
-              </button>
+              </button> */}
               <button
                 onClick={() => navigate("/register")}
                 className="btn btn-primary"

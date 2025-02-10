@@ -13,8 +13,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import { FaSpinner } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 
 ChartJS.register(
   CategoryScale,
@@ -191,83 +192,103 @@ const MyBookings = () => {
   }
 
   return (
-    <div className="container w-11/12 mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-6 my-10">
       <h2 className="text-3xl text-center text-purple-600 font-semibold mb-6">
         My Bookings
       </h2>
-
       <div className="overflow-x-auto mb-6">
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-blue-400 text-white">
-              <th className="border px-4 py-2 font-semibold">Car Image</th>
-              <th className="border px-4 py-2 font-semibold">Car Model</th>
-              <th className="border px-4 py-2 font-semibold">Daily Price</th>
-              <th className="border px-4 py-2 font-semibold">Booking Date</th>
-              <th className="border px-4 py-2 font-semibold">Start Date</th>
-              <th className="border px-4 py-2 font-semibold">End data</th>
-              <th className="border px-4 py-2 font-semibold">Total Price</th>
-              <th className="border px-4 py-2 font-semibold">Booking Status</th>
-              <th className="border px-4 py-2 font-semibold">Actions</th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Car Image
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Car Model
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Daily Price
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Booking Date
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Start Date
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                End Date
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Total Price
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Booking Status
+              </th>
+              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking, index) => {
-              const duration = calculateDuration(
-                booking.dateAdded,
-                booking.currentDate
-              );
-
-              return (
-                <tr
-                  key={booking._id}
-                  className={`${
-                    index % 2 === 0 ? "bg-purple-400" : "bg-sky-500"
-                  } hover:bg-blue-200 transition-colors`}
-                >
-                  <td className="border px-4 py-2">
-                    <img
-                      src={booking.imageURL}
-                      alt={booking.carModel}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                  </td>
-                  <td className="border px-4 py-2">{booking.carModel}</td>
-                  <td className="border px-4 py-2">
-                    ${booking.dailyRentalPrice}
-                  </td>
-                  <td className="border px-4 py-2">{booking.currentDate}</td>
-                  <td className="border px-4 py-2">{booking.startDate}</td>
-                  <td className="border px-4 py-2">{booking.endDate}</td>
-                  <td className="border px-4 py-2">
-                    ${booking.totalPrice.toFixed(2)}
-                  </td>
-
-                  <td className="border px-4 py-2">{booking.bookingStatus}</td>
-                  <td className="border px-4 py-2">
-                    <button
-                      onClick={() => handleModifyData(booking)}
-                      className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                    >
-                      Modify Date
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                      onClick={() => handleCancelBooking(booking)}
-                    >
-                      Cancel Booking
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {bookings.map((booking, index) => (
+              <tr
+                key={booking._id}
+                className={`${
+                  index % 2 === 0 ? "bg-purple-400" : "bg-sky-500"
+                } hover:bg-blue-200 transition-colors`}
+              >
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  <img
+                    src={booking.imageURL}
+                    alt={booking.carModel}
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  {booking.carModel}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  ${booking.dailyRentalPrice}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  {booking.currentDate}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  {booking.startDate}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  {booking.endDate}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  ${booking.totalPrice.toFixed(2)}
+                </td>
+                <td className="border px-4 py-2 whitespace-nowrap">
+                  {booking.bookingStatus}
+                </td>
+                <td className=" px-4 py-2 whitespace-nowrap flex   space-x-2">
+                  <button
+                    onClick={() => handleModifyData(booking)}
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                    aria-label="Modify Booking"
+                  >
+                    <FaEdit size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleCancelBooking(booking)}
+                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                    aria-label="Cancel Booking"
+                  >
+                    <FaTrash size={18} />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <div className="">
         <Line data={chartData} />
       </div>
-
       {isModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">
@@ -305,7 +326,6 @@ const MyBookings = () => {
           </div>
         </div>
       )}
-
       {isCancelModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">

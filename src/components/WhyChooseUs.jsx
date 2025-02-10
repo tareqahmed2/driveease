@@ -8,7 +8,7 @@ import {
 
 const WhyChooseUs = () => {
   return (
-    <section className="my-16 px-6 w-11/12 mx-auto">
+    <section className="my-16 px-6 max-w-7xl mx-auto">
       <h2 className="text-3xl  text-center mb-3 text-purple-800 font-bold">
         Why Choose Us?
       </h2>

@@ -65,7 +65,7 @@ const RecentListings = () => {
   };
 
   return (
-    <section className="my-16 px-6 w-11/12 mx-auto">
+    <section className="my-16 px-6 max-w-7xl mx-auto">
       <h2 className="text-4xl text-purple-800 font-semibold text-center mb-4">
         Recent Listings
       </h2>

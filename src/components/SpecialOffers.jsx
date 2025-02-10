@@ -82,7 +82,7 @@ const specialOffers = [
 const SpecialOffers = () => {
   const navigate = useNavigate();
   return (
-    <section className="my-16 px-6">
+    <section className="my-16 max-w-7xl mx-auto px-6">
       <h2 className="text-4xl text-purple-500 font-semibold text-center mb-5">
         Special Offers
       </h2>
@@ -92,11 +92,11 @@ const SpecialOffers = () => {
         your next trip. Don’t miss out on these fantastic savings and book your
         ride today!
       </p>
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {specialOffers.map((offer) => (
           <motion.div
             key={offer.id}
-            className="w-full sm:w-80 bg-white rounded-lg shadow-xl p-8 flex flex-col items-center text-center transform transition-all duration-100 hover:scale-105 hover:shadow-2xl"
+            className="card w-full bg-base-100 shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", stiffness: 80, delay: 0.2 }}
@@ -106,19 +106,18 @@ const SpecialOffers = () => {
               transition: { type: "spring", stiffness: 500, damping: 10 },
             }}
           >
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              {offer.title}
-            </h3>
-            <p className="text-gray-600 mb-6">{offer.description}</p>
-            <button
-              onClick={() => {
-                navigate("/available-cars");
-              }}
-              href={offer.link}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Book Now
-            </button>
+            <div className="card-body text-center">
+              <h2 className="card-title text-gray-800">{offer.title}</h2>
+              <p className="text-gray-600">{offer.description}</p>
+              <div className="card-actions justify-center mt-4">
+                <button
+                  onClick={() => navigate("/available-cars")}
+                  className="btn btn-primary"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>

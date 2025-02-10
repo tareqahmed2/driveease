@@ -53,42 +53,46 @@ const UserTestimonials = () => {
   });
 
   return (
-    <section className="w-11/12 mx-auto my-16 px-6 py-12 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-      <h2 className="text-4xl font-semibold text-center mb-4  text-white">
-        What Our Customers Say
-      </h2>
-      <p className="text-white text-center mb-12 w-4/5 mx-auto">
-        Discover the real stories behind our customer satisfaction! In this
-        section, we share honest feedback and testimonials from those who have
-        experienced our top-notch car rental services. See how we've helped them
-        enjoy seamless, reliable, and memorable journeys.
-      </p>
+    <section className="max-w-7xl px-6 mx-auto">
+      <div className=" my-16  py-12 bg-slate-200 rounded-lg">
+        <h2 className="text-4xl font-semibold text-center mb-4  text-purple-500">
+          What Our Customers Say
+        </h2>
+        <p className="text-purple-500 text-center mb-12 w-4/5 mx-auto">
+          Discover the real stories behind our customer satisfaction! In this
+          section, we share honest feedback and testimonials from those who have
+          experienced our top-notch car rental services. See how we've helped
+          them enjoy seamless, reliable, and memorable journeys.
+        </p>
 
-      <Slider {...settings} className="px-4">
-        {testimonials.map((testimonial, index) => (
-          <animated.div
-            key={testimonial.id}
-            style={fadeInOut}
-            className={`flex flex-col items-center text-center p-8 rounded-lg shadow-xl hover:scale-105 transition-all duration-300 ease-in-out ${testimonial.background}`}
-          >
-            <animated.img
-              src={testimonial.image}
-              alt={testimonial.name}
-              className="w-28 h-28 mx-auto rounded-full mb-6 shadow-lg"
+        <Slider {...settings} className="px-4">
+          {testimonials.map((testimonial, index) => (
+            <animated.div
+              key={testimonial.id}
               style={fadeInOut}
-            />
-            <h3 className="text-2xl font-bold mb-3 text-gray-800 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
-              {testimonial.name}
-            </h3>
-            <div className="flex mb-3 justify-center">
-              {[...Array(testimonial.rating)].map((_, idx) => (
-                <FaStar key={idx} className="text-yellow-400 text-lg" />
-              ))}
-            </div>
-            <p className="text-lg text-gray-700 italic">{testimonial.review}</p>
-          </animated.div>
-        ))}
-      </Slider>
+              className={`flex flex-col items-center text-center p-8 rounded-lg shadow-xl hover:scale-105 transition-all duration-300 ease-in-out`}
+            >
+              <animated.img
+                src={testimonial.image}
+                alt={testimonial.name}
+                className="w-28 h-28 mx-auto rounded-full mb-6 shadow-lg"
+                style={fadeInOut}
+              />
+              <h3 className="text-2xl font-bold mb-3 text-gray-800 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
+                {testimonial.name}
+              </h3>
+              <div className="flex mb-3 justify-center">
+                {[...Array(testimonial.rating)].map((_, idx) => (
+                  <FaStar key={idx} className="text-yellow-400 text-lg" />
+                ))}
+              </div>
+              <p className="text-lg text-gray-700 italic">
+                {testimonial.review}
+              </p>
+            </animated.div>
+          ))}
+        </Slider>
+      </div>
     </section>
   );
 };
