@@ -114,5 +114,5 @@ The Car Rental System is a feature-rich, user-friendly platform designed to stre
 1. **Clone the repositories:**
    ```bash
    git clone https://github.com/tareqahmed2/driveease-server-side
-   git clone https://github.com/tareqahmed2/driveease
+   git clone https://github.com/tareqahmed2/driveease-client-side
    ```
