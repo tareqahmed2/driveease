@@ -4,6 +4,8 @@ import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { FaSpinner, FaEdit, FaTrash } from "react-icons/fa";
+import { Helmet } from "react-helmet";
+import { useTheme } from "next-themes";
 
 const MyCars = () => {
   const { user } = useAuth();
@@ -141,6 +143,7 @@ const MyCars = () => {
       }
     });
   };
+  const { theme } = useTheme();
 
   if (loading) {
     return (
@@ -153,8 +156,18 @@ const MyCars = () => {
   return (
     <div>
       <div className="min-h-screen max-w-7xl mx-auto  py-10 px-4 my-10 rounded-lg">
+        <Helmet>
+          <title>DriveEase | My Cars</title>
+          <link rel="canonical" href="https://www.tacobell.com/" />
+        </Helmet>
         <div className=" bg-base-200 shadow-xl rounded-lg p-8">
-          <h2 className="text-3xl font-semibold text-center mb-8">My Cars</h2>
+          <h2
+            className={`text-3xl font-semibold text-center mb-8 ${
+              theme === "light" ? "text-gray-800" : "text-white"
+            }`}
+          >
+            My Cars
+          </h2>
 
           {cars.length === 0 ? (
             <div className="text-center">
@@ -169,19 +182,54 @@ const MyCars = () => {
             <>
               <div className=" flex justify-between mb-4">
                 <div>
-                  <label htmlFor="sortOptions" className="mr-2">
+                  <label
+                    htmlFor="sortOptions"
+                    className={`mr-2 ${
+                      theme === "light" ? "text-gray-800" : "text-white"
+                    }`}
+                  >
                     Sort by:
                   </label>
                   <select
                     id="sortOptions"
                     value={sortOrder}
                     onChange={handleSortChange}
-                    className="select select-bordered"
+                    className={`select select-bordered ${
+                      theme === "light" ? "bg-white" : "bg-gray-800"
+                    }`}
                   >
-                    <option value="dateDesc">Date Added (Newest First)</option>
-                    <option value="dateAsc">Date Added (Oldest First)</option>
-                    <option value="priceAsc">Price (Lowest First)</option>
-                    <option value="priceDesc">Price (Highest First)</option>
+                    <option
+                      className={` font-semibold  mb-8 ${
+                        theme === "light" ? "text-gray-800" : "text-white"
+                      }`}
+                      value="dateDesc"
+                    >
+                      Date Added (Newest First)
+                    </option>
+                    <option
+                      className={` font-semibold  mb-8 ${
+                        theme === "light" ? "text-gray-800" : "text-white"
+                      }`}
+                      value="dateAsc"
+                    >
+                      Date Added (Oldest First)
+                    </option>
+                    <option
+                      className={` font-semibold  mb-8 ${
+                        theme === "light" ? "text-gray-800" : "text-white"
+                      }`}
+                      value="priceAsc"
+                    >
+                      Price (Lowest First)
+                    </option>
+                    <option
+                      className={` font-semibold  mb-8 ${
+                        theme === "light" ? "text-gray-800" : "text-white"
+                      }`}
+                      value="priceDesc"
+                    >
+                      Price (Highest First)
+                    </option>
                   </select>
                 </div>
               </div>
@@ -189,26 +237,58 @@ const MyCars = () => {
               <div className="overflow-x-auto">
                 <table className="table-auto w-full border-collapse border border-gray-300">
                   <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                    <tr
+                      className={`${
+                        theme === "light" ? "bg-white" : "bg-gray-800"
+                      }`}
+                    >
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Car Image
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Car Model
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Daily Rental Price
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Availability
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Booking Count
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Date Added
                       </th>
-                      <th className="border border-gray-300 p-2 whitespace-nowrap">
+                      <th
+                        className={`border border-gray-300 p-2 whitespace-nowrap ${
+                          theme === "light" ? "text-gray-800" : "text-white"
+                        }`}
+                      >
                         Actions
                       </th>
                     </tr>
@@ -216,26 +296,50 @@ const MyCars = () => {
                   <tbody>
                     {cars.map((car) => (
                       <tr key={car.id}>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           <img
                             src={car.imageURL}
                             alt={car.carModel}
                             className="w-16 h-16 object-cover mx-auto"
                           />
                         </td>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           {car.carModel}
                         </td>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           {car.dailyRentalPrice} $
                         </td>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           {car.availability}
                         </td>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           {car.bookingCount}
                         </td>
-                        <td className="border border-gray-300 p-2 text-center whitespace-nowrap">
+                        <td
+                          className={`border border-gray-300 p-2 text-center whitespace-nowrap ${
+                            theme === "light" ? "text-gray-800" : "text-white"
+                          }`}
+                        >
                           {car.dateAdded}
                         </td>
                         <td className="border flex border-gray-300 p-2 text-center whitespace-nowrap">
@@ -263,7 +367,11 @@ const MyCars = () => {
 
           {modalOpen && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center h-[100vh] my-10">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4">
+              <div
+                className={` p-6 rounded-lg shadow-lg w-full sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4 ${
+                  theme === "light" ? "bg-white" : "bg-gray-800"
+                }`}
+              >
                 <h3 className="text-xl font-semibold">Update Car Details</h3>
                 <form onSubmit={handleUpdate}>
                   <div className="flex flex-col md:flex-row">

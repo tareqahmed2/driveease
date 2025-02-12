@@ -6,6 +6,8 @@ import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { FaSpinner } from "react-icons/fa";
+import { Helmet } from "react-helmet";
+import { useTheme } from "next-themes";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -206,6 +208,7 @@ const CarDetails = () => {
         console.error(error.message);
       });
   };
+  const { theme } = useTheme();
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -214,16 +217,28 @@ const CarDetails = () => {
     );
   }
   return (
-    <div className="containercontainer mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-4">
+      <Helmet>
+        <title>DriveEase | CarDetails</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+      </Helmet>
       {carData.map((car, index) => {
         return (
           <div
             key={car._id}
-            className={`car-details border p-6 rounded-lg shadow-lg bg-white mb-6 ${
+            className={`car-details border p-6 rounded-lg shadow-lg  ${
+              theme === "light" ? "bg-white" : "bg-gray-800"
+            } mb-6 px-6 ${
               index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
             } hover:shadow-xl transition-shadow`}
           >
-            <h2 className="text-2xl font-semibold mb-4">{car.carModel}</h2>
+            <h2
+              className={`text-2xl font-semibold mb-4 ${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
+              {car.carModel}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="car-image">
                 <img
@@ -233,14 +248,34 @@ const CarDetails = () => {
                 />
               </div>
               <div className="car-info">
-                <p className="text-xl font-semibold">
+                <p
+                  className={`text-2xl font-semibold mb-4 ${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }`}
+                >
                   Price per Day: ${car.dailyRentalPrice}
                 </p>
-                <p className="text-gray-600">
+                <p
+                  className={`  mb-2 ${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }`}
+                >
                   Availability: {car.availability}
                 </p>
-                <p className="text-gray-600 mt-2">Features: {car.features}</p>
-                <p className="text-gray-600 mt-2">{car.description}</p>
+                <p
+                  className={`  mb-2 ${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }`}
+                >
+                  Features: {car.features}
+                </p>
+                <p
+                  className={`  mb-2 ${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }`}
+                >
+                  {car.description}
+                </p>
                 <button
                   className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg"
                   onClick={() => handleBooking(car)}
@@ -256,7 +291,13 @@ const CarDetails = () => {
       {/* Modal for date selection */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 my-4 rounded-lg w-96">
+          <div
+            className={`${
+              theme === "light"
+                ? "bg-white text-black"
+                : "bg-gray-800 text-white"
+            } p-6 mx-1 my-4 rounded-lg w-full md:w-96`}
+          >
             <div className="car-image">
               <h2 className="text-2xl font-semibold mb-4">
                 {selectedCar.carModel}
@@ -272,7 +313,7 @@ const CarDetails = () => {
               <h3 className="text-2xl font-semibold mb-4">
                 Select Booking Dates
               </h3>
-              <label htmlFor="startDate" className="block text-gray-700">
+              <label htmlFor="startDate" className="block">
                 Start Date (DD-MM-YYYY)
               </label>
               <input
@@ -281,11 +322,13 @@ const CarDetails = () => {
                 placeholder="DD-MM-YYYY"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className={`w-full p-2 border ${
+                  theme === "light" ? "border-gray-300" : "border-gray-700"
+                } rounded-md bg-${theme === "light" ? "white" : "gray-700"}`}
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="endDate" className="block text-gray-700">
+              <label htmlFor="endDate" className="block">
                 End Date (DD-MM-YYYY)
               </label>
               <input
@@ -294,13 +337,17 @@ const CarDetails = () => {
                 placeholder="DD-MM-YYYY"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className={`w-full p-2 border ${
+                  theme === "light" ? "border-gray-300" : "border-gray-700"
+                } rounded-md bg-${theme === "light" ? "white" : "gray-700"}`}
               />
             </div>
             <div className="flex justify-between">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-2 bg-gray-300 text-white rounded-lg"
+                className={`px-6 py-2 ${
+                  theme === "light" ? "bg-gray-300" : "bg-gray-600"
+                } text-white rounded-lg`}
               >
                 Cancel
               </button>

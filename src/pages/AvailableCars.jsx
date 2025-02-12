@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import { FaSpinner } from "react-icons/fa";
+import { Helmet } from "react-helmet";
+import { useTheme } from "next-themes";
 
 const AvailableCars = () => {
   const [availableCars, setAvailableCars] = useState([]);
@@ -10,11 +11,10 @@ const AvailableCars = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
+  const { theme } = useTheme(); // Hook for managing theme
 
   useEffect(() => {
-    setLoading(true);
     axios
       .get("https://assignment11-server-side-mu.vercel.app/all-cars")
       .then((res) => {
@@ -49,20 +49,31 @@ const AvailableCars = () => {
   const toggleView = () => {
     setView(view === "grid" ? "list" : "grid");
   };
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin text-3xl" />
+      <div className="flex justify-center max-w-screen-xl mx-auto items-center min-h-screen">
+        <FaSpinner className="animate-spin text-3xl text-black" />
       </div>
     );
   }
+
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div
+      className={`max-w-7xl my-10 mx-auto p-4 rounded-lg ${
+        theme === "light"
+          ? "bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"
+          : "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"
+      } text-white`}
+    >
+      <Helmet>
+        <title>DriveEase | Available Cars</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+      </Helmet>
       <div>
         <h2 className="text-purple-600 text-center font-extrabold text-4xl mb-5">
           Our Available Cars
         </h2>
-
         <p className="w-4/5 mx-auto text-center text-gray-600 mb-12">
           Browse through our diverse collection of vehicles, carefully selected
           to meet your travel needs. Whether you're looking for an economy car,
@@ -70,6 +81,7 @@ const AvailableCars = () => {
           ensure comfort and style for every journey.
         </p>
       </div>
+
       <div className="mb-4 flex items-center">
         <input
           type="text"
@@ -91,13 +103,46 @@ const AvailableCars = () => {
         <select
           onChange={(e) => setSortBy(e.target.value)}
           value={sortBy}
-          className="px-4 py-2 border rounded-lg"
+          className={`px-4 py-2 border rounded-lg ${
+            theme === "light"
+              ? "text-gray-800 bg-white"
+              : "bg-gray-800 text-white"
+          }`}
         >
-          <option value="">Sort By</option>
-          <option value="price-asc">Price-ascending</option>
-          <option value="price-des">Price-descending</option>
-          <option value="bookingCount-asc">Booking Count-ascending</option>
-          <option value="bookingCount-des">Booking Count=descending</option>
+          <option
+            className={`${
+              theme === "light"
+                ? "text-gray-800 bg-white"
+                : "bg-gray-800 text-white"
+            }`}
+            value=""
+          >
+            Sort By
+          </option>
+          <option
+            className={`${theme === "light" ? "text-gray-800" : "text-white"}`}
+            value="price-asc"
+          >
+            Price-ascending
+          </option>
+          <option
+            className={`${theme === "light" ? "text-gray-800" : "text-white"}`}
+            value="price-des"
+          >
+            Price-descending
+          </option>
+          <option
+            className={`${theme === "light" ? "text-gray-800" : "text-white"}`}
+            value="bookingCount-asc"
+          >
+            Booking Count-ascending
+          </option>
+          <option
+            className={`${theme === "light" ? "text-gray-800" : "text-white"}`}
+            value="bookingCount-des"
+          >
+            Booking Count-descending
+          </option>
         </select>
       </div>
 
@@ -111,30 +156,51 @@ const AvailableCars = () => {
         {sortedCars.map((car) => (
           <div
             key={car._id}
-            className="car-card border p-4 mb-2 rounded-lg shadow-lg bg-white"
+            className={`car-card p-4 mb-2 rounded-lg shadow-lg ${
+              theme === "light"
+                ? "bg-white border-gray-300"
+                : "bg-gray-800 border-gray-700"
+            }`}
           >
             <img
               src={car.imageURL}
               alt={car.carModel}
               className={`${
-                view === "grid" ? "w-full h-48  object-cover" : "w-full  h-full"
+                view === "grid" ? "w-full h-48 object-cover" : "w-full h-full"
               } rounded-lg mb-4`}
             />
-            {/* <div
+            <h3
+              className={`text-xl font-semibold ${
+                theme === "light" ? "text-gray-800" : "text-gray-200"
+              }`}
+            >
+              {car.carModel}
+            </h3>
+            <p
               className={`${
-                view === "grid" ? "w-full h-48 object-cover" : "w-full h-full"
-              } rounded-lg mb-4 bg-no-repeat bg-center`}
-              style={{ backgroundImage: `url(${car.imageURL})` }}
-            ></div> */}
-
-            <h3 className="text-xl font-semibold">{car.carModel}</h3>
-            <p className="text-gray-600">Price: ${car.dailyRentalPrice}/day</p>
-            <p className="text-gray-600">Location: {car.location}</p>
-            <p className="text-gray-600">Booking Count: {car.bookingCount}</p>
+                theme === "light" ? "text-gray-600" : "text-white"
+              }`}
+            >
+              Price: ${car.dailyRentalPrice}/day
+            </p>
+            <p
+              className={`${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
+              Location: {car.location}
+            </p>
+            <p
+              className={`${
+                theme === "light" ? "text-gray-600" : "text-white"
+              }`}
+            >
+              Booking Count: {car.bookingCount}
+            </p>
 
             <button
               onClick={() => navigate(`/car-details/${car._id}`)}
-              className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg"
+              className="mt-4 px-6 py-2 bg-green-500 hover:bg-green-800 text-white rounded-lg"
             >
               Book Now
             </button>

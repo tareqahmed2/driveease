@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "next-themes";
 
 const RecentListings = () => {
   const [cars, setCars] = useState([]);
   const { setLoading } = useAuth();
   setLoading(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("https://assignment11-server-side-mu.vercel.app/all-cars")
@@ -63,13 +65,21 @@ const RecentListings = () => {
       return "Error calculating days ago";
     }
   };
-
+  const handleNavigate = () => {
+    navigate("/available-cars");
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  };
+  const { theme } = useTheme();
   return (
     <section className="my-16 px-6 max-w-7xl mx-auto">
       <h2 className="text-4xl text-purple-800 font-semibold text-center mb-4">
         Recent Listings
       </h2>
-      <p className="text-gray-600 text-xl text-center  mb-12">
+      <p
+        className={` text-xl text-center  mb-12 ${
+          theme === "light" ? "text-gray-600" : "text-white"
+        }`}
+      >
         Explore our recent listings of top-quality, well-maintained vehicles,
         perfect for every journey and occasion.
       </p>
@@ -77,7 +87,9 @@ const RecentListings = () => {
         {cars.map((car) => (
           <div
             key={car._id}
-            className="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300"
+            className={` shadow-lg rounded-lg overflow-hidden transform hover:scale-105 hover:shadow-2xl transition-transform duration-300 ${
+              theme === "light" ? "bg-white" : "bg-gray-800"
+            }`}
           >
             <img
               src={car.imageURL}
@@ -89,8 +101,18 @@ const RecentListings = () => {
               style={{ backgroundImage: `url(${car.imageURL})` }}
             ></div> */}
             <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">{car.carModel}</h3>
-              <p className="text-gray-600 mb-2">
+              <h3
+                className={` text-xl mb-2 ${
+                  theme === "light" ? "text-gray-600" : "text-white"
+                }`}
+              >
+                {car.carModel}
+              </h3>
+              <p
+                className={` mb-2 ${
+                  theme === "light" ? "text-gray-600" : "text-white"
+                }`}
+              >
                 Per Day Price: ${car.dailyRentalPrice}/day
               </p>
               <p
@@ -102,13 +124,27 @@ const RecentListings = () => {
               >
                 {car.availability}
               </p>
-              <p className="text-gray-500 text-sm">
+              <p
+                className={`text-sm mb-2 ${
+                  theme === "light" ? "text-gray-600" : "text-white"
+                }`}
+              >
                 Booking Count:{car.bookingCount}
               </p>
 
-              <p className="text-gray-500 text-sm">
+              <p
+                className={`text-sm mb-2 ${
+                  theme === "light" ? "text-gray-600" : "text-white"
+                }`}
+              >
                 {calculateDaysAgo(car.dateAdded)}
               </p>
+              <button
+                onClick={() => handleNavigate()}
+                className="btn btn-primary my-3 hover:btn-success"
+              >
+                See More...
+              </button>
             </div>
           </div>
         ))}

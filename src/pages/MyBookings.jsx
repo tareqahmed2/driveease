@@ -16,6 +16,8 @@ import {
 
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
+import { Helmet } from "react-helmet";
+import { useTheme } from "next-themes";
 
 ChartJS.register(
   CategoryScale,
@@ -52,7 +54,6 @@ const MyBookings = () => {
       })
       .catch((err) => console.error(err));
   }, [user.email]);
-
   const handleModifyData = (booking) => {
     setModifiedBooking(booking);
     setNewBookingDate(booking.dateAdded);
@@ -190,9 +191,14 @@ const MyBookings = () => {
       </div>
     );
   }
-
+  const { theme } = useTheme();
   return (
     <div className="max-w-7xl mx-auto p-6 my-10">
+      <Helmet>
+        <title>DriveEase | My Booking</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+      </Helmet>
+
       <h2 className="text-3xl text-center text-purple-600 font-semibold mb-6">
         My Bookings
       </h2>
@@ -200,31 +206,67 @@ const MyBookings = () => {
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-blue-400 text-white">
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Car Image
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Car Model
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Daily Price
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Booking Date
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Start Date
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 End Date
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Total Price
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Booking Status
               </th>
-              <th className="border px-4 py-2 font-semibold whitespace-nowrap">
+              <th
+                className={`border px-4 py-2 font-semibold whitespace-nowrap ${
+                  theme === "light" ? "text-gray-800" : "text-white"
+                }`}
+              >
                 Actions
               </th>
             </tr>
@@ -237,32 +279,72 @@ const MyBookings = () => {
                   index % 2 === 0 ? "bg-purple-400" : "bg-sky-500"
                 } hover:bg-blue-200 transition-colors`}
               >
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   <img
                     src={booking.imageURL}
                     alt={booking.carModel}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   {booking.carModel}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   ${booking.dailyRentalPrice}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   {booking.currentDate}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   {booking.startDate}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   {booking.endDate}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   ${booking.totalPrice.toFixed(2)}
                 </td>
-                <td className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  className={`${
+                    theme === "light" ? "text-gray-800" : "text-white"
+                  }
+                  border px-4 py-2 whitespace-nowrap`}
+                >
                   {booking.bookingStatus}
                 </td>
                 <td className=" px-4 py-2 whitespace-nowrap flex   space-x-2">
@@ -291,9 +373,25 @@ const MyBookings = () => {
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Modify Booking</h2>
-            <label className="block mb-2">New Start Date</label>
+          <div
+            className={` p-6 rounded-lg ${
+              theme === "light" ? "bg-white" : "bg-gray-800"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-semibold mb-4 ${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
+              Modify Booking
+            </h2>
+            <label
+              className={`text-sm font-semibold mb-4 ${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
+              New Start Date
+            </label>
             <input
               type="text"
               id="startDate"
@@ -301,7 +399,13 @@ const MyBookings = () => {
               onChange={(e) => setStartUpdateDate(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            <label className="block mb-2">New End Date</label>
+            <label
+              className={`text-sm font-semibold mb-4 ${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
+              New End Date
+            </label>
             <input
               type="text"
               id="endDate"
@@ -312,13 +416,13 @@ const MyBookings = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
+                className="bg-gray-500 text-white px-4 py-2 my-3 rounded"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveModifiedData}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white px-4 py-2 my-3 rounded"
               >
                 Save
               </button>
@@ -328,8 +432,16 @@ const MyBookings = () => {
       )}
       {isCancelModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">
+          <div
+            className={` p-6 rounded-lg ${
+              theme === "light" ? "bg-white" : "bg-gray-800"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-semibold mb-4 ${
+                theme === "light" ? "text-gray-800" : "text-white"
+              }`}
+            >
               Are you sure you want to cancel this booking?
             </h2>
             <div className="flex justify-between">

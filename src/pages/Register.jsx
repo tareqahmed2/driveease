@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
+import { Helmet } from "react-helmet";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -47,6 +48,10 @@ const Register = () => {
   };
   return (
     <div className="flex justify-center items-center my-10 mx-5">
+      <Helmet>
+        <title>DriveEase | Register</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+      </Helmet>
       <div className="card bg-base-100 w-full md:w-3/4 lg:w-3/6 shrink-0 shadow-2xl">
         <h2 className="text-2xl my-10 font-bold text-center mb-2 text-blue-600">
           Register Now!

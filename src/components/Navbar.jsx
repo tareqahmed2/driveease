@@ -10,67 +10,64 @@ import {
   FaCarAlt,
   FaClipboardList,
 } from "react-icons/fa";
+import Theme from "../global/Theme";
+import { useTheme } from "next-themes";
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logOut } = useAuth();
+
+  // theme manage
+  const { theme } = useTheme();
+  console.log(theme);
 
   const handleLogout = () => {
     logOut();
     navigate("/login");
   };
 
+  const getNavLinkClass = (isActive) => {
+    return `flex items-center gap-2 font-bold ${
+      theme === "light"
+        ? isActive
+          ? "text-accent"
+          : "text-gray-700 hover:text-accent"
+        : isActive
+        ? "text-accent"
+        : "text-white hover:text-accent"
+    }`;
+  };
+
   const links = (
     <>
       <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `flex items-center gap-2 font-bold ${
-              isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-            }`
-          }
-        >
+        <NavLink to="/" className={({ isActive }) => getNavLinkClass(isActive)}>
           <FaHome /> Home
         </NavLink>
       </li>
       <li>
         <NavLink
           to="/available-cars"
-          className={({ isActive }) =>
-            `flex items-center gap-2 font-bold ${
-              isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-            }`
-          }
+          className={({ isActive }) => getNavLinkClass(isActive)}
         >
           <FaCar /> Available Cars
         </NavLink>
       </li>
       {!user && (
-        <>
-          <li>
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                `flex items-center gap-2 font-bold ${
-                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-                }`
-              }
-            >
-              <FaSignInAlt /> Login
-            </NavLink>
-          </li>
-        </>
+        <li>
+          <NavLink
+            to="/login"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <FaSignInAlt /> Login
+          </NavLink>
+        </li>
       )}
       {user && (
         <>
           <li>
             <NavLink
               to="/add-car"
-              className={({ isActive }) =>
-                `flex items-center gap-2 font-bold ${
-                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-                }`
-              }
+              className={({ isActive }) => getNavLinkClass(isActive)}
             >
               <FaPlusCircle /> Add Car
             </NavLink>
@@ -78,11 +75,7 @@ const Navbar = () => {
           <li>
             <NavLink
               to="/my-cars"
-              className={({ isActive }) =>
-                `flex items-center gap-2 font-bold ${
-                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-                }`
-              }
+              className={({ isActive }) => getNavLinkClass(isActive)}
             >
               <FaCarAlt /> My Cars
             </NavLink>
@@ -90,11 +83,7 @@ const Navbar = () => {
           <li>
             <NavLink
               to="/my-bookings"
-              className={({ isActive }) =>
-                `flex items-center gap-2 font-bold ${
-                  isActive ? "text-accent" : "text-gray-600 hover:text-accent"
-                }`
-              }
+              className={({ isActive }) => getNavLinkClass(isActive)}
             >
               <FaClipboardList /> My Bookings
             </NavLink>
@@ -105,7 +94,11 @@ const Navbar = () => {
   );
 
   return (
-    <div className="bg-slate-200 sticky top-0 backdrop-blur-lg z-50">
+    <div
+      className={` sticky top-0 backdrop-blur-lg z-50 ${
+        theme === "light" ? "bg-slate-200" : "bg-gray-700"
+      }`}
+    >
       <div className="navbar  max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between">
         {/* Navbar Start */}
         <div className="navbar-start w-auto lg:w-1/4 flex items-center gap-3">
@@ -128,7 +121,9 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              className={`menu menu-sm dropdown-content  rounded-box z-[1] mt-3 w-52 p-2 shadow ${
+                theme === "light" ? "bg-base-100 " : "bg-gray-700"
+              }`}
             >
               {links}
             </ul>
@@ -152,31 +147,36 @@ const Navbar = () => {
         {/* Navbar End */}
         <div className="navbar-end w-auto flex items-center gap-4">
           {user ? (
-            <div className="dropdown dropdown-end">
-              <label
-                tabIndex={0}
-                className="btn btn-ghost btn-circle avatar flex items-center"
-              >
-                <div className="w-10 rounded-full">
-                  <img src={user?.photoURL} alt="User Avatar" />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box w-32 p-2 shadow flex flex-col gap-2"
-              >
-                <p className="font-bold text-[12px] mb-2 text-purple-800 mx-auto">
-                  {user?.displayName}
-                </p>
-                <li>
-                  <button
-                    onClick={handleLogout}
-                    className="font-bold mx-auto hover:text-accent text-white bg-purple-500"
-                  >
-                    Logout
-                  </button>
-                </li>
-              </ul>
+            <div className="flex items-center">
+              <div className="mr-3">
+                <Theme></Theme>
+              </div>
+              <div className="dropdown dropdown-end">
+                <label
+                  tabIndex={0}
+                  className="btn btn-ghost btn-circle avatar flex items-center"
+                >
+                  <div className="w-10 rounded-full">
+                    <img src={user?.photoURL} alt="User Avatar" />
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box w-32 p-2 shadow flex flex-col gap-2"
+                >
+                  <p className="font-bold text-[12px] mb-2 text-purple-800 mx-auto">
+                    {user?.displayName}
+                  </p>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="font-bold mx-auto hover:text-accent text-white bg-purple-500"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           ) : (
             <>
@@ -186,9 +186,10 @@ const Navbar = () => {
               >
                 Login
               </button> */}
+              <Theme></Theme>
               <button
                 onClick={() => navigate("/register")}
-                className="btn btn-primary"
+                className="btn btn-primary hover:btn-success"
               >
                 Register
               </button>

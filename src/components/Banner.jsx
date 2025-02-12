@@ -1,6 +1,8 @@
 import React from "react";
 import bgImg from "../assets/bg-img.jpg";
+import { useTheme } from "next-themes";
 const Banner = () => {
+  const { theme } = useTheme();
   return (
     <div className="max-w-7xl mx-auto px-6">
       <div
@@ -13,9 +15,14 @@ const Banner = () => {
         <div className="absolute inset-0 bg-black bg-opacity-50  rounded-2xl"></div>
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 shadow-lg">
+          <h1 className="sm:text-xl text-2xl md:text-6xl font-bold mb-6 shadow-lg">
             Drive Your Dreams Today!
           </h1>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-xl sm:max-w-2xl px-4">
+            Start your journey with the best cars on the market. Explore a wide
+            range of vehicles that fit your needs, style, and budget. Find your
+            perfect match today!
+          </p>
           <button
             onClick={() => {
               window.location.href = "/available-cars";

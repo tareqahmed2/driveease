@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -51,9 +52,29 @@ const Login = () => {
       });
   };
 
+  // Demo login function
+  const handleDemoLogin = () => {
+    const demoEmail = "tareqahmed347396@gmail.com";
+    const demoPassword = "tareq123";
+
+    signInUser(demoEmail, demoPassword, navigate)
+      .then((result) => {
+        console.log("Demo sign in", result.user);
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.error("Demo sign in error:", error);
+        setError("Failed to sign in. Please try again.");
+      });
+  };
+
   return (
-    <div className="flex justify-center items-center my-10 mx-5">
-      <div className="card bg-base-100 w-full md:w-3/4 lg:w-3/6 px-2 shrink-0 shadow-2xl">
+    <div className="px-6 flex justify-center items-center my-10 mx-5">
+      <Helmet>
+        <title>DriveEase | Login</title>
+        <link rel="canonical" href="https://www.tacobell.com/" />
+      </Helmet>
+      <div className="card bg-base-100 w-full md:w-3/4 lg:w-3/6 px-2 shrink-0 shadow-2xl max-w-7xl">
         <h2 className="text-2xl my-10 font-bold text-center mb-6 text-[#FF00D3]">
           Login Now!
         </h2>
@@ -95,6 +116,14 @@ const Login = () => {
           </div>
 
           <div className="form-control mt-6">
+            {/* Demo Login Button */}
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="btn btn-accent border-none bg-[#FF00D3] mb-5"
+            >
+              Demo Login
+            </button>
             <button className="btn btn-accent border-none bg-[#FF00D3]">
               Login
             </button>
